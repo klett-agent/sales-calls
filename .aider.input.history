@@ -405,3 +405,85 @@
 
 # 2026-02-01 14:56:21.092223
 +N
+
+# 2026-02-01 15:09:41.891171
++/add form.results.html
++
+
+# 2026-02-01 15:09:50.833410
++fix form.results.html
+
+# 2026-02-01 15:10:03.161557
++the response data is not correctly mapped
+
+# 2026-02-01 15:11:25.867357
++this is correct {{ $('get_insights1').item.json.message.content.call_summary }} this is not correct {{ $json.message.content.call_summary || 'No summary available' }}
+
+# 2026-02-01 15:13:05.324842
++this is wrong {{ $json.message.content.call_summary || 'No summary available' }} this is correct approach, syntax: {{ $json.message_content_call_summary }}
+
+# 2026-02-01 15:15:55.819947
++N
+
+# 2026-02-01 15:18:02.834734
++this is correct syntax        {{ $json.message_content_call_summary }} and this is not: {{ (() => { if (!$json.message_content_top_3_recommendations ||
++            $json.message_content_top_3_recommendations.length === 0) { return
++            '
++            <p class="empty-state">No recommendations available</p>
++            '; } let html = '
++            <div class="list">
++              '; for (let i = 0; i <
++              $json.message_content_top_3_recommendations.length; i++) { html +=
++              '
++              <div class="recommendation-item">
++                ' + $json.message_content_top_3_recommendations[i] + '
++              </div>
++              '; } html += '
++            </div>
++            '; return html; })() }}
+
+# 2026-02-01 15:18:51.493802
++this is wrong and making error: 
++            {{ (() => { if ($json.message_content_surface_questions &&
++            $json.message_content_surface_questions.length > 0) { let html = '
++            <div class="pattern-section">
++              <h3 class="pattern-title">Surface Questions</h3>
++              <div class="list">
++                '; for (let i = 0; i <
++                $json.message_content_surface_questions.length; i++) { html +=
++                '
++                <div class="list-item">
++                  ' + $json.message_content_surface_questions[i] + '
++                </div>
++                '; } html += '
++              </div>
++            </div>
++            '; return html; } return ''; })() }} {{ (() => { if
++            ($json.message_content_impact_questions &&
++            $json.message_content_impact_questions.length > 0) { let html = '
++            <div class="pattern-section">
++              <h3 class="pattern-title">Impact Questions</h3>
++              <div class="list">
++                '; for (let i = 0; i <
++                $json.message_content_impact_questions.length; i++) { html += '
++                <div class="list-item">
++                  ' + $json.message_content_impact_questions[i] + '
++                </div>
++                '; } html += '
++              </div>
++            </div>
++            '; return html; } return ''; })() }}
+
+# 2026-02-01 15:20:55.860151
++N
+
+# 2026-02-01 15:22:04.830442
++this is now working witouth error, but there is error that every letter is new item in list, for instane in Key Strengths
++
+
+# 2026-02-01 15:22:43.425000
++this is now working witouth error, but there is error that every letter is new item in list, for instane in Key Strengths
++see the sales-calls.csv for the schema
+
+# 2026-02-01 15:24:46.457311
++n

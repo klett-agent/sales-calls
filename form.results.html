@@ -864,7 +864,7 @@
       <div class="header">
         <div class="header-content">
           <h1>
-            {{ $json.message.content.call_title || 'Call Analysis Report' }}
+            {{ $json.message_content_call_title }}
           </h1>
           <p class="header-subtitle">
             Comprehensive conversation insights and recommendations
@@ -880,7 +880,7 @@
           </div>
           <div class="card-body">
             <p class="summary-text">
-              {{ $json.message.content.call_summary || 'No summary available' }}
+              {{ $json.message_content_call_summary }}
             </p>
           </div>
         </div>
@@ -893,10 +893,10 @@
           <div class="card-body">
             <div class="badge-group">
               <span
-                class="badge {{ $json.message.content.overall_sentiment || 'neutral' }}"
+                class="badge {{ $json.message_content_overall_sentiment }}"
               >
                 <span class="badge-dot"></span>
-                {{ $json.message.content.overall_sentiment || 'neutral' }}
+                {{ $json.message_content_overall_sentiment }}
               </span>
             </div>
           </div>
@@ -911,20 +911,19 @@
             <div class="metric-grid">
               <div class="metric-card">
                 <div class="metric-value">
-                  {{ $json.message.content.talk_ratio_rep_percent || 0 }}%
+                  {{ $json.message_content_talk_ratio_rep_percent }}%
                 </div>
                 <div class="metric-label">Rep</div>
               </div>
               <div class="metric-card">
                 <div class="metric-value">
-                  {{ $json.message.content.talk_ratio_customer_percent || 0 }}%
+                  {{ $json.message_content_talk_ratio_customer_percent }}%
                 </div>
                 <div class="metric-label">Customer</div>
               </div>
             </div>
             <p class="summary-text" style="margin-top: 1rem">
-              {{ $json.message.content.talk_ratio_analysis || 'No analysis
-              available' }}
+              {{ $json.message_content_talk_ratio_analysis }}
             </p>
           </div>
         </div>
@@ -938,62 +937,36 @@
             <div class="metric-grid">
               <div class="metric-card">
                 <div class="metric-value">
-                  {{ $json.message.content.questions_total || 0 }}
+                  {{ $json.message_content_questions_total }}
                 </div>
                 <div class="metric-label">Total</div>
               </div>
               <div class="metric-card">
                 <div class="metric-value">
-                  {{ $json.message.content.questions_surface_count || 0 }}
+                  {{ $json.message_content_questions_surface_count }}
                 </div>
                 <div class="metric-label">Surface</div>
               </div>
               <div class="metric-card">
                 <div class="metric-value">
-                  {{ $json.message.content.questions_impact_count || 0 }}
+                  {{ $json.message_content_questions_impact_count }}
                 </div>
                 <div class="metric-label">Impact</div>
               </div>
               <div class="metric-card">
                 <div class="metric-value">
-                  {{ $json.message.content.questions_quality_score || 'N/A' }}
+                  {{ $json.message_content_questions_quality_score }}
                 </div>
                 <div class="metric-label">Quality</div>
               </div>
             </div>
             <p class="summary-text" style="margin-top: 1rem">
-              {{ $json.message.content.questions_analysis || 'No analysis
-              available' }}
+              {{ $json.message_content_questions_analysis }}
             </p>
 
-            {{ (() => { if ($json.message.content.surface_questions &&
-            $json.message.content.surface_questions.length > 0) { let html = '
-            <div class="pattern-section">
-              <h3 class="pattern-title">Surface Questions</h3>
-              <div class="list">
-                '; for (let i = 0; i <
-                $json.message.content.surface_questions.length; i++) { html += '
-                <div class="list-item">
-                  ' + $json.message.content.surface_questions[i] + '
-                </div>
-                '; } html += '
-              </div>
-            </div>
-            '; return html; } return ''; })() }} {{ (() => { if
-            ($json.message.content.impact_questions &&
-            $json.message.content.impact_questions.length > 0) { let html = '
-            <div class="pattern-section">
-              <h3 class="pattern-title">Impact Questions</h3>
-              <div class="list">
-                '; for (let i = 0; i <
-                $json.message.content.impact_questions.length; i++) { html += '
-                <div class="list-item">
-                  ' + $json.message.content.impact_questions[i] + '
-                </div>
-                '; } html += '
-              </div>
-            </div>
-            '; return html; } return ''; })() }}
+            {{ (() => { const surfaceQuestions = $json.message_content_surface_questions; if (surfaceQuestions && typeof surfaceQuestions === 'string' && surfaceQuestions.trim().length > 0) { const questions = surfaceQuestions.split(',').map(q => q.trim()).filter(q => q.length > 0); if (questions.length > 0) { let html = '<div class="pattern-section"><h3 class="pattern-title">Surface Questions</h3><div class="list">'; for (let i = 0; i < questions.length; i++) { html += '<div class="list-item">' + questions[i] + '</div>'; } html += '</div></div>'; return html; } } return ''; })() }}
+            
+            {{ (() => { const impactQuestions = $json.message_content_impact_questions; if (impactQuestions && typeof impactQuestions === 'string' && impactQuestions.trim().length > 0) { const questions = impactQuestions.split(',').map(q => q.trim()).filter(q => q.length > 0); if (questions.length > 0) { let html = '<div class="pattern-section"><h3 class="pattern-title">Impact Questions</h3><div class="list">'; for (let i = 0; i < questions.length; i++) { html += '<div class="list-item">' + questions[i] + '</div>'; } html += '</div></div>'; return html; } } return ''; })() }}
           </div>
         </div>
 
@@ -1003,32 +976,7 @@
             <h2 class="card-title">Topics Discussed</h2>
           </div>
           <div class="card-body">
-            {{ (() => { if (!$json.message.content.topics ||
-            $json.message.content.topics.length === 0) { return '
-            <p class="empty-state">No topics available</p>
-            '; } let html = ''; for (let i = 0; i <
-            $json.message.content.topics.length; i++) { let topic =
-            $json.message.content.topics[i]; html += '
-            <div class="topic-card">
-              '; html += '
-              <div class="topic-header">
-                '; html += '
-                <div class="topic-name">' + topic.topic_name + '</div>
-                '; html += '
-                <div class="topic-time">
-                  ' + topic.time_percent + '% of conversation
-                </div>
-                '; html += '
-              </div>
-              '; html += '
-              <div class="badge-group">
-                '; html += '<span class="badge ' + topic.sentiment + '"
-                  ><span class="badge-dot"></span>' + topic.sentiment + '</span
-                >'; html += '
-              </div>
-              '; html += '
-            </div>
-            '; } return html; })() }}
+            {{ (() => { if (!$json.message_content_topics || $json.message_content_topics.length === 0) { return '<p class="empty-state">No topics available</p>'; } let html = ''; for (let i = 0; i < $json.message_content_topics.length; i++) { let topic = $json.message_content_topics[i]; html += '<div class="topic-card">'; html += '<div class="topic-header">'; html += '<div class="topic-name">' + topic.topic_name + '</div>'; html += '<div class="topic-time">' + topic.time_percent + '% of conversation</div>'; html += '</div>'; html += '<div class="badge-group">'; html += '<span class="badge ' + topic.sentiment + '"><span class="badge-dot"></span>' + topic.sentiment + '</span>'; html += '</div>'; html += '</div>'; } return html; })() }}
           </div>
         </div>
 
@@ -1038,43 +986,7 @@
             <h2 class="card-title">Sentiment Moments</h2>
           </div>
           <div class="card-body">
-            {{ (() => { if (!$json.message.content.sentiment_moments ||
-            $json.message.content.sentiment_moments.length === 0) { return '
-            <p class="empty-state">No sentiment moments tracked</p>
-            '; } let html = ''; for (let i = 0; i <
-            $json.message.content.sentiment_moments.length; i++) { let moment =
-            $json.message.content.sentiment_moments[i]; html += '
-            <div class="moment-card">
-              '; html += '
-              <div class="moment-header">' + moment.when + '</div>
-              '; html += '
-              <div class="sentiment-flow">
-                '; html += '<span
-                  class="badge ' + moment.customer_sentiment_before + '"
-                  >' + moment.customer_sentiment_before + '</span
-                >'; html += '<span class="sentiment-arrow">→</span>'; html +=
-                '<span class="badge ' + moment.customer_sentiment_after + '"
-                  >' + moment.customer_sentiment_after + '</span
-                >'; html += '
-              </div>
-              '; html += '
-              <div class="moment-detail">
-                <strong>Trigger:</strong> ' + moment.trigger + '
-              </div>
-              '; html += '
-              <div class="moment-detail">
-                <strong>Rep Response:</strong> ' + moment.rep_response + '
-              </div>
-              '; html += '
-              <div class="badge-group" style="margin-top: 0.75rem">
-                '; html += '<span
-                  class="badge ' + (moment.response_effectiveness === 'EXCELLENT' ? 'positive' : 'info') + '"
-                  >Effectiveness: ' + moment.response_effectiveness + '</span
-                >'; html += '
-              </div>
-              '; html += '
-            </div>
-            '; } return html; })() }}
+            {{ (() => { if (!$json.message_content_sentiment_moments || $json.message_content_sentiment_moments.length === 0) { return '<p class="empty-state">No sentiment moments tracked</p>'; } let html = ''; for (let i = 0; i < $json.message_content_sentiment_moments.length; i++) { let moment = $json.message_content_sentiment_moments[i]; html += '<div class="moment-card">'; html += '<div class="moment-header">' + moment.when + '</div>'; html += '<div class="sentiment-flow">'; html += '<span class="badge ' + moment.customer_sentiment_before + '">' + moment.customer_sentiment_before + '</span>'; html += '<span class="sentiment-arrow">→</span>'; html += '<span class="badge ' + moment.customer_sentiment_after + '">' + moment.customer_sentiment_after + '</span>'; html += '</div>'; html += '<div class="moment-detail"><strong>Trigger:</strong> ' + moment.trigger + '</div>'; html += '<div class="moment-detail"><strong>Rep Response:</strong> ' + moment.rep_response + '</div>'; html += '<div class="badge-group" style="margin-top: 0.75rem">'; html += '<span class="badge ' + (moment.response_effectiveness === 'EXCELLENT' ? 'positive' : 'info') + '">Effectiveness: ' + moment.response_effectiveness + '</span>'; html += '</div>'; html += '</div>'; } return html; })() }}
           </div>
         </div>
 
@@ -1084,29 +996,7 @@
             <h2 class="card-title">Objections</h2>
           </div>
           <div class="card-body">
-            {{ (() => { if (!$json.message.content.objections ||
-            $json.message.content.objections.length === 0) { return '
-            <p class="empty-state">No objections recorded</p>
-            '; } let html = ''; for (let i = 0; i <
-            $json.message.content.objections.length; i++) { let obj =
-            $json.message.content.objections[i]; html += '
-            <div class="objection-card">
-              '; html += '
-              <div class="objection-text">' + obj.objection + '</div>
-              '; html += '
-              <div class="moment-detail">
-                <strong>Response:</strong> ' + obj.rep_response + '
-              </div>
-              '; html += '
-              <div class="badge-group" style="margin-top: 0.75rem">
-                '; html += '<span
-                  class="badge ' + (obj.outcome === 'resolved' ? 'positive' : 'warning') + '"
-                  >Outcome: ' + obj.outcome + '</span
-                >'; html += '
-              </div>
-              '; html += '
-            </div>
-            '; } return html; })() }}
+            {{ (() => { if (!$json.message_content_objections || $json.message_content_objections.length === 0) { return '<p class="empty-state">No objections recorded</p>'; } let html = ''; for (let i = 0; i < $json.message_content_objections.length; i++) { let obj = $json.message_content_objections[i]; html += '<div class="objection-card">'; html += '<div class="objection-text">' + obj.objection + '</div>'; html += '<div class="moment-detail"><strong>Response:</strong> ' + obj.rep_response + '</div>'; html += '<div class="badge-group" style="margin-top: 0.75rem">'; html += '<span class="badge ' + (obj.outcome === 'resolved' ? 'positive' : 'warning') + '">Outcome: ' + obj.outcome + '</span>'; html += '</div>'; html += '</div>'; } return html; })() }}
           </div>
         </div>
 
@@ -1116,102 +1006,7 @@
             <h2 class="card-title">Conversation Patterns</h2>
           </div>
           <div class="card-body">
-            {{ (() => { let patterns =
-            $json.message.content.conversation_patterns; if (!patterns) return '
-            <p class="empty-state">No patterns available</p>
-            '; let html = ''; if (patterns.pricing_mentions &&
-            patterns.pricing_mentions.length > 0) { html += '
-            <div class="pattern-section">
-              <h3 class="pattern-title">Pricing Mentions</h3>
-              '; for (let i = 0; i < patterns.pricing_mentions.length; i++) {
-              let pricing = patterns.pricing_mentions[i]; html += '
-              <div class="pricing-card">
-                '; html += '
-                <div class="pricing-type">' + pricing.pricing_type + '</div>
-                '; html += '
-                <div class="moment-detail">
-                  <strong>Context:</strong> ' + pricing.context + '
-                </div>
-                '; html += '
-                <div class="moment-detail">
-                  <strong>Customer Reaction:</strong> ' +
-                  pricing.customer_reaction + '
-                </div>
-                '; html += '
-                <div class="badge-group" style="margin-top: 0.75rem">
-                  '; html += '<span
-                    class="badge ' + (pricing.timing_assessment === 'APPROPRIATE' ? 'positive' : 'warning') + '"
-                    >Timing: ' + pricing.timing_assessment + '</span
-                  >'; html += '
-                </div>
-                '; html += '
-              </div>
-              '; } html += '
-            </div>
-            '; } if (patterns.next_steps_and_followups &&
-            patterns.next_steps_and_followups.length > 0) { html += '
-            <div class="pattern-section">
-              <h3 class="pattern-title">Next Steps & Follow-ups</h3>
-              '; for (let i = 0; i < patterns.next_steps_and_followups.length;
-              i++) { let action = patterns.next_steps_and_followups[i]; html +=
-              '
-              <div class="action-item-card">
-                '; html += '
-                <div class="action-item-header">' + action.action_item + '</div>
-                '; html += '
-                <div class="action-meta">
-                  '; html += '
-                  <div class="action-meta-item">
-                    <strong>Owner:</strong> ' + action.owner + '
-                  </div>
-                  '; html += '
-                  <div class="action-meta-item">
-                    <strong>Timeline:</strong> ' + action.timeline + '
-                  </div>
-                  '; html += '
-                </div>
-                '; html += '
-                <div class="badge-group" style="margin-top: 0.75rem">
-                  '; html += '<span
-                    class="badge ' + (action.commitment_level === 'STRONG' ? 'positive' : 'info') + '"
-                    >Commitment: ' + action.commitment_level + '</span
-                  >'; html += '
-                </div>
-                '; html += '
-              </div>
-              '; } html += '
-            </div>
-            '; } if (patterns.recurring_themes &&
-            patterns.recurring_themes.length > 0) { html += '
-            <div class="pattern-section">
-              <h3 class="pattern-title">Recurring Themes</h3>
-              '; for (let i = 0; i < patterns.recurring_themes.length; i++) {
-              let theme = patterns.recurring_themes[i]; html += '
-              <div class="theme-card">
-                '; html += '
-                <div class="theme-header">
-                  '; html += '
-                  <div class="theme-name">' + theme.theme + '</div>
-                  '; html += '<span class="frequency-badge"
-                    >×' + theme.frequency + '</span
-                  >'; html += '
-                </div>
-                '; html += '
-                <div class="badge-group">
-                  '; html += '<span
-                    class="badge ' + (theme.importance === 'HIGH' ? 'accent' : 'info') + '"
-                    >Importance: ' + theme.importance + '</span
-                  >'; html += '<span class="badge info"
-                    >Status: ' + theme.resolution_status + '</span
-                  >'; html += '
-                </div>
-                '; html += '
-              </div>
-              '; } html += '
-            </div>
-            '; } return html || '
-            <p class="empty-state">No patterns available</p>
-            '; })() }}
+            {{ (() => { let patterns = $json.message_content_conversation_patterns; if (!patterns) return '<p class="empty-state">No patterns available</p>'; let html = ''; if (patterns.pricing_mentions && patterns.pricing_mentions.length > 0) { html += '<div class="pattern-section"><h3 class="pattern-title">Pricing Mentions</h3>'; for (let i = 0; i < patterns.pricing_mentions.length; i++) { let pricing = patterns.pricing_mentions[i]; html += '<div class="pricing-card">'; html += '<div class="pricing-type">' + pricing.pricing_type + '</div>'; html += '<div class="moment-detail"><strong>Context:</strong> ' + pricing.context + '</div>'; html += '<div class="moment-detail"><strong>Customer Reaction:</strong> ' + pricing.customer_reaction + '</div>'; html += '<div class="badge-group" style="margin-top: 0.75rem">'; html += '<span class="badge ' + (pricing.timing_assessment === 'APPROPRIATE' ? 'positive' : 'warning') + '">Timing: ' + pricing.timing_assessment + '</span>'; html += '</div>'; html += '</div>'; } html += '</div>'; } if (patterns.next_steps_and_followups && patterns.next_steps_and_followups.length > 0) { html += '<div class="pattern-section"><h3 class="pattern-title">Next Steps & Follow-ups</h3>'; for (let i = 0; i < patterns.next_steps_and_followups.length; i++) { let action = patterns.next_steps_and_followups[i]; html += '<div class="action-item-card">'; html += '<div class="action-item-header">' + action.action_item + '</div>'; html += '<div class="action-meta">'; html += '<div class="action-meta-item"><strong>Owner:</strong> ' + action.owner + '</div>'; html += '<div class="action-meta-item"><strong>Timeline:</strong> ' + action.timeline + '</div>'; html += '</div>'; html += '<div class="badge-group" style="margin-top: 0.75rem">'; html += '<span class="badge ' + (action.commitment_level === 'STRONG' ? 'positive' : 'info') + '">Commitment: ' + action.commitment_level + '</span>'; html += '</div>'; html += '</div>'; } html += '</div>'; } if (patterns.recurring_themes && patterns.recurring_themes.length > 0) { html += '<div class="pattern-section"><h3 class="pattern-title">Recurring Themes</h3>'; for (let i = 0; i < patterns.recurring_themes.length; i++) { let theme = patterns.recurring_themes[i]; html += '<div class="theme-card">'; html += '<div class="theme-header">'; html += '<div class="theme-name">' + theme.theme + '</div>'; html += '<span class="frequency-badge">×' + theme.frequency + '</span>'; html += '</div>'; html += '<div class="badge-group">'; html += '<span class="badge ' + (theme.importance === 'HIGH' ? 'accent' : 'info') + '">Importance: ' + theme.importance + '</span>'; html += '<span class="badge info">Status: ' + theme.resolution_status + '</span>'; html += '</div>'; html += '</div>'; } html += '</div>'; } return html || '<p class="empty-state">No patterns available</p>'; })() }}
           </div>
         </div>
 
@@ -1222,19 +1017,7 @@
               <h2 class="card-title">Key Strengths</h2>
             </div>
             <div class="card-body">
-              {{ (() => { if (!$json.message.content.key_strengths ||
-              $json.message.content.key_strengths.length === 0) { return '
-              <p class="empty-state">No strengths identified</p>
-              '; } let html = '
-              <div class="list">
-                '; for (let i = 0; i <
-                $json.message.content.key_strengths.length; i++) { html += '
-                <div class="strength-item">
-                  ' + $json.message.content.key_strengths[i] + '
-                </div>
-                '; } html += '
-              </div>
-              '; return html; })() }}
+              {{ (() => { const strengths = $json.message_content_key_strengths; if (!strengths || typeof strengths !== 'string' || strengths.trim().length === 0) { return '<p class="empty-state">No strengths identified</p>'; } const items = strengths.split(',').map(s => s.trim()).filter(s => s.length > 0); if (items.length === 0) { return '<p class="empty-state">No strengths identified</p>'; } let html = '<div class="list">'; for (let i = 0; i < items.length; i++) { html += '<div class="strength-item">' + items[i] + '</div>'; } html += '</div>'; return html; })() }}
             </div>
           </div>
 
@@ -1244,19 +1027,7 @@
               <h2 class="card-title">Key Weaknesses</h2>
             </div>
             <div class="card-body">
-              {{ (() => { if (!$json.message.content.key_weaknesses ||
-              $json.message.content.key_weaknesses.length === 0) { return '
-              <p class="empty-state">No weaknesses identified</p>
-              '; } let html = '
-              <div class="list">
-                '; for (let i = 0; i <
-                $json.message.content.key_weaknesses.length; i++) { html += '
-                <div class="weakness-item">
-                  ' + $json.message.content.key_weaknesses[i] + '
-                </div>
-                '; } html += '
-              </div>
-              '; return html; })() }}
+              {{ (() => { const weaknesses = $json.message_content_key_weaknesses; if (!weaknesses || typeof weaknesses !== 'string' || weaknesses.trim().length === 0) { return '<p class="empty-state">No weaknesses identified</p>'; } const items = weaknesses.split(',').map(w => w.trim()).filter(w => w.length > 0); if (items.length === 0) { return '<p class="empty-state">No weaknesses identified</p>'; } let html = '<div class="list">'; for (let i = 0; i < items.length; i++) { html += '<div class="weakness-item">' + items[i] + '</div>'; } html += '</div>'; return html; })() }}
             </div>
           </div>
         </div>
@@ -1267,20 +1038,7 @@
             <h2 class="card-title">Top 3 Recommendations</h2>
           </div>
           <div class="card-body">
-            {{ (() => { if (!$json.message.content.top_3_recommendations ||
-            $json.message.content.top_3_recommendations.length === 0) { return '
-            <p class="empty-state">No recommendations available</p>
-            '; } let html = '
-            <div class="list">
-              '; for (let i = 0; i <
-              $json.message.content.top_3_recommendations.length; i++) { html +=
-              '
-              <div class="recommendation-item">
-                ' + $json.message.content.top_3_recommendations[i] + '
-              </div>
-              '; } html += '
-            </div>
-            '; return html; })() }}
+            {{ (() => { const recommendations = $json.message_content_top_3_recommendations; if (!recommendations || typeof recommendations !== 'string' || recommendations.trim().length === 0) { return '<p class="empty-state">No recommendations available</p>'; } const items = recommendations.split(',').map(r => r.trim()).filter(r => r.length > 0); if (items.length === 0) { return '<p class="empty-state">No recommendations available</p>'; } let html = '<div class="list">'; for (let i = 0; i < items.length; i++) { html += '<div class="recommendation-item">' + items[i] + '</div>'; } html += '</div>'; return html; })() }}
           </div>
         </div>
       </div>
