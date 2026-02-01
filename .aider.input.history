@@ -272,3 +272,121 @@
 +    "finish_reason": "stop"
 +  }
 +]
+
+# 2026-02-01 14:05:25.527217
++table will get data from webhook and sample data looks like this: {
++    "0": "",
++    "row_number": 2,
++    "index": 0,
++    "filename": "top 5.wav",
++    "result": "Yes",
++    "message_role": "assistant",
++    "message_content_call_title": "Successful Educational Materials Sales",
++    "message_content_call_summary": "The sales representative successfully navigated a discussion with a professor regarding pricing and ordering quantities for educational materials. The representative effectively addressed queries and secured a follow-up meeting.",
++    "message_content_overall_sentiment": "positive",
++    "message_content_talk_ratio_rep_percent": 45,
++    "message_content_talk_ratio_customer_percent": 55,
++    "message_content_talk_ratio_analysis": "The customer dominated the conversation slightly, which suggests active engagement and interest.",
++    "message_content_questions_total": 10,
++    "message_content_questions_surface_count": 3,
++    "message_content_questions_impact_count": 7,
++    "message_content_questions_quality_score": "HIGH",
++    "message_content_questions_analysis": "The representative asked a series of effective impact questions that guided the customer towards considering order quantities and potential needs.",
++    "message_content_surface_questions": "Do you have the materials?, Can you confirm the price?, Do you need more details?",
++    "message_content_impact_questions": "How many copies do you anticipate needing?, What specific features are of interest?, What is the required quantity for discounts?",
++    "message_content_topics_0_topic_name": "Pricing discussion",
++    "message_content_topics_0_time_percent": 30,
++    "message_content_topics_0_sentiment": "neutral",
++    "message_content_topics_1_topic_name": "Product features",
++    "message_content_topics_1_time_percent": 25,
++    "message_content_topics_1_sentiment": "positive",
++    "message_content_sentiment_moments_0_when": "When pricing was mentioned",
++    "message_content_sentiment_moments_0_customer_sentiment_before": "neutral",
++    "message_content_sentiment_moments_0_customer_sentiment_after": "positive",
++    "message_content_sentiment_moments_0_trigger": "Discounted pricing tiers explained",
++    "message_content_sentiment_moments_0_rep_response": "Provided clear pricing breakdown",
++    "message_content_sentiment_moments_0_response_effectiveness": "EXCELLENT",
++    "message_content_objections_0_objection": "Price is too high",
++    "message_content_objections_0_rep_response": "Highlighted volume discounts",
++    "message_content_objections_0_outcome": "resolved",
++    "message_content_conversation_patterns_feature_presentations_0_feature_name": "Rapid essay preparation",
++    "message_content_conversation_patterns_feature_presentations_0_how_presented": "Clarified content inclusion",
++    "message_content_conversation_patterns_feature_presentations_0_customer_reaction": "Positive, showing interest",
++    "message_content_conversation_patterns_feature_presentations_0_effectiveness": "EXCELLENT",
++    "message_content_conversation_patterns_pricing_mentions_0_pricing_type": "Bulk order discounts",
++    "message_content_conversation_patterns_pricing_mentions_0_context": "Discussed after inquiry on order sizes",
++    "message_content_conversation_patterns_pricing_mentions_0_customer_reaction": "Interested in pricing benefits",
++    "message_content_conversation_patterns_pricing_mentions_0_timing_assessment": "APPROPRIATE",
++    "message_content_conversation_patterns_benefits_and_perks_0_benefit_type": "Volume discount",
++    "message_content_conversation_patterns_benefits_and_perks_0_when_mentioned": "During pricing discussion",
++    "message_content_conversation_patterns_benefits_and_perks_0_impact": "Increased customer interest",
++    "message_content_conversation_patterns_next_steps_and_followups_0_action_item": "Confirm order quantities and specific needs",
++    "message_content_conversation_patterns_next_steps_and_followups_0_owner": "Customer",
++    "message_content_conversation_patterns_next_steps_and_followups_0_timeline": "Next week",
++    "message_content_conversation_patterns_next_steps_and_followups_0_commitment_level": "STRONG",
++    "message_content_conversation_patterns_recurring_themes_0_theme": "Importance of discounts in decision making",
++    "message_content_conversation_patterns_recurring_themes_0_frequency": 3,
++    "message_content_conversation_patterns_recurring_themes_0_importance": "HIGH",
++    "message_content_conversation_patterns_recurring_themes_0_resolution_status": "Addressed fully",
++    "message_content_key_strengths": "Clarified pricing options effectively, Established clear next steps, Addressed customer concerns about price",
++    "message_content_key_weaknesses": "",
++    "message_content_top_3_recommendations": "Continue offering detailed price breakdowns, Maintain focus on customer needs and volumes, Follow-up as planned to secure orders",
++    "message_refusal": "",
++    "message_annotations": "",
++    "logprobs": "",
++    "finish_reason": "stop",
++    "message_content_objections": "",
++    "message_content_conversation_patterns_feature_presentations": "",
++    "message_content_conversation_patterns_pricing_mentions": "",
++    "message_content_conversation_patterns_benefits_and_perks": "",
++    "message_content_conversation_patterns_recurring_themes": "",
++    "message_content_sentiment_moments": ""
++}
+
+# 2026-02-01 14:09:06.521367
++N
+
+# 2026-02-01 14:10:54.748783
++fix the error, the table is loading forewer
+
+# 2026-02-01 14:16:03.965541
++/add default.css
+
+# 2026-02-01 14:16:13.526537
++fix css in separate file
+
+# 2026-02-01 14:19:14.933985
++fix css in separate file --cache-prompts
+
+# 2026-02-01 14:19:37.176782
++fix css in separate file
+
+# 2026-02-01 14:22:39.518650
++fix this syntax in css file to be used in html file
+
+# 2026-02-01 14:22:59.489564
++is this css file valid to be used in html file
+
+# 2026-02-01 14:23:21.354687
++N
+
+# 2026-02-01 14:24:35.841596
++the table is loading forewer. fix
+
+# 2026-02-01 14:26:38.410647
++N
+
+# 2026-02-01 14:33:33.888078
++the index.html is reciving data from webhook confirmed from network investigation, but the table shows No calls found. Click "New Transcription" to add one. but there is one
+
+# 2026-02-01 14:35:43.673646
++N
+
+# 2026-02-01 14:38:24.598800
++when click on new transcription button, modal open and broken link init klett-agent.app.n8n.cloud refused to connect.
+
+# 2026-02-01 14:40:51.609634
++N
+
+# 2026-02-01 14:41:50.463977
++now it is loading again broken, it was good last step if you can see your history

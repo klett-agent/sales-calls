@@ -4,962 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Call Center Analysis</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
-
-      :root {
-        --color-primary: #2563eb;
-        --color-primary-light: #3b82f6;
-        --color-primary-dark: #1e40af;
-        --color-accent: #7c3aed;
-        --color-accent-light: #8b5cf6;
-        --color-bg: #ffffff;
-        --color-bg-secondary: #f8fafc;
-        --color-bg-tertiary: #f1f5f9;
-        --color-surface: #ffffff;
-        --color-text: #0f172a;
-        --color-text-secondary: #475569;
-        --color-text-muted: #64748b;
-        --color-border: #e2e8f0;
-        --color-border-light: #f1f5f9;
-        --color-success: #059669;
-        --color-success-light: #d1fae5;
-        --color-success-bg: #ecfdf5;
-        --color-warning: #d97706;
-        --color-warning-light: #fef3c7;
-        --color-warning-bg: #fffbeb;
-        --color-error: #dc2626;
-        --color-error-light: #fee2e2;
-        --color-error-bg: #fef2f2;
-        --color-info: #0284c7;
-        --color-info-light: #dbeafe;
-        --color-info-bg: #f0f9ff;
-        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        --shadow:
-          0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-        --shadow-md:
-          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        --shadow-lg:
-          0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        --shadow-xl:
-          0 20px 25px -5px rgba(0, 0, 0, 0.1),
-          0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        --radius-sm: 0.375rem;
-        --radius: 0.5rem;
-        --radius-lg: 0.75rem;
-        --radius-xl: 1rem;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html {
-        font-size: 16px;
-        scroll-behavior: smooth;
-      }
-
-      body {
-        font-family:
-          "Inter",
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
-        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-        color: var(--color-text);
-        min-height: 100vh;
-        padding: 1.5rem;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      .container {
-        max-width: 100%;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      .header {
-        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-        border-radius: var(--radius-xl);
-        padding: 2.5rem 1.5rem;
-        margin-bottom: 2rem;
-        box-shadow: var(--shadow-xl);
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .header::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(
-          90deg,
-          var(--color-primary),
-          var(--color-accent),
-          var(--color-primary)
-        );
-        background-size: 200% 100%;
-        animation: shimmer 3s linear infinite;
-      }
-
-      @keyframes shimmer {
-        0% {
-          background-position: -200% 0;
-        }
-        100% {
-          background-position: 200% 0;
-        }
-      }
-
-      .header-content {
-        position: relative;
-        z-index: 1;
-      }
-
-      .header h1 {
-        font-family: "Playfair Display", serif;
-        font-size: 2rem;
-        font-weight: 800;
-        color: white;
-        margin-bottom: 0.75rem;
-        letter-spacing: -0.03em;
-        line-height: 1.1;
-      }
-
-      .header-subtitle {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 0.95rem;
-        font-weight: 500;
-        letter-spacing: 0.01em;
-      }
-
-      .toolbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        flex-wrap: wrap;
-      }
-
-      .search-box {
-        flex: 1;
-        min-width: 200px;
-        position: relative;
-      }
-
-      .search-box input {
-        width: 100%;
-        padding: 0.875rem 1rem 0.875rem 2.75rem;
-        background: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-lg);
-        color: var(--color-text);
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
-        font-family: inherit;
-      }
-
-      .search-box input:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-
-      .search-box::before {
-        content: "🔍";
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1rem;
-        pointer-events: none;
-      }
-
-      .toolbar-actions {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .btn-primary {
-        padding: 0.875rem 1.75rem;
-        background: linear-gradient(
-          135deg,
-          var(--color-primary) 0%,
-          var(--color-accent) 100%
-        );
-        color: white;
-        border: none;
-        border-radius: var(--radius-lg);
-        font-size: 0.95rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: var(--shadow-md);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        white-space: nowrap;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
-      }
-
-      .btn-primary:active {
-        transform: scale(0.98);
-      }
-
-      .btn-primary:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      .btn-secondary {
-        padding: 0.875rem 1.75rem;
-        background: linear-gradient(
-          135deg,
-          var(--color-accent) 0%,
-          var(--color-accent-light) 100%
-        );
-        color: white;
-        border: none;
-        border-radius: var(--radius-lg);
-        font-size: 0.95rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: var(--shadow-md);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        white-space: nowrap;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .btn-secondary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.4);
-      }
-
-      .btn-secondary:active {
-        transform: scale(0.98);
-      }
-
-      .btn-secondary:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      .card {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        padding: 0;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--color-border);
-        overflow: hidden;
-      }
-
-      .table-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.9rem;
-      }
-
-      thead {
-        background: var(--color-bg-secondary);
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
-
-      th {
-        padding: 1rem 1.25rem;
-        text-align: left;
-        font-weight: 700;
-        color: var(--color-text);
-        border-bottom: 2px solid var(--color-border);
-        white-space: nowrap;
-        cursor: pointer;
-        user-select: none;
-        transition: all 0.2s ease;
-        position: relative;
-      }
-
-      th:hover {
-        background: var(--color-bg-tertiary);
-        color: var(--color-primary);
-      }
-
-      th.sortable::after {
-        content: "⇅";
-        margin-left: 0.5rem;
-        opacity: 0.3;
-        font-size: 0.875rem;
-      }
-
-      th.sort-asc::after {
-        content: "↑";
-        opacity: 1;
-        color: var(--color-primary);
-      }
-
-      th.sort-desc::after {
-        content: "↓";
-        opacity: 1;
-        color: var(--color-primary);
-      }
-
-      tbody tr {
-        border-bottom: 1px solid var(--color-border-light);
-        transition: all 0.2s ease;
-      }
-
-      tbody tr:hover {
-        background: var(--color-bg-secondary);
-      }
-
-      tbody tr:last-child {
-        border-bottom: none;
-      }
-
-      td {
-        padding: 1rem 1.25rem;
-        color: var(--color-text-secondary);
-        vertical-align: middle;
-      }
-
-      td:first-child {
-        font-weight: 600;
-        color: var(--color-text);
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.75rem;
-        border-radius: var(--radius);
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-        border: 1px solid transparent;
-        white-space: nowrap;
-      }
-
-      .badge.positive {
-        background: var(--color-success-bg);
-        color: var(--color-success);
-        border-color: var(--color-success-light);
-      }
-
-      .badge.negative {
-        background: var(--color-error-bg);
-        color: var(--color-error);
-        border-color: var(--color-error-light);
-      }
-
-      .badge.neutral {
-        background: var(--color-warning-bg);
-        color: var(--color-warning);
-        border-color: var(--color-warning-light);
-      }
-
-      .badge.info {
-        background: var(--color-info-bg);
-        color: var(--color-info);
-        border-color: var(--color-info-light);
-      }
-
-      .badge-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: currentColor;
-      }
-
-      .action-link {
-        color: var(--color-primary);
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-      }
-
-      .action-link:hover {
-        color: var(--color-primary-dark);
-        text-decoration: underline;
-      }
-
-      .loading {
-        text-align: center;
-        padding: 3rem;
-        color: var(--color-text-muted);
-      }
-
-      .loading::after {
-        content: "";
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        margin-left: 0.5rem;
-        border: 3px solid var(--color-border);
-        border-radius: 50%;
-        border-top-color: var(--color-primary);
-        animation: spin 0.8s linear infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .error-message {
-        text-align: center;
-        padding: 2rem;
-        color: var(--color-error);
-        background: var(--color-error-bg);
-        border-radius: var(--radius);
-        margin: 1rem;
-        border: 1px solid var(--color-error-light);
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: var(--color-text-muted);
-        font-style: italic;
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      .stat-card {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        padding: 1.5rem;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--color-border);
-        text-align: center;
-        transition: all 0.2s ease;
-      }
-
-      .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-        border-color: var(--color-primary);
-      }
-
-      .stat-value {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--color-primary);
-        margin-bottom: 0.5rem;
-      }
-
-      .stat-label {
-        font-size: 0.875rem;
-        color: var(--color-text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-weight: 600;
-      }
-
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        backdrop-filter: blur(4px);
-      }
-
-      .modal.active {
-        display: flex;
-      }
-
-      .modal-content {
-        background: var(--color-surface);
-        border-radius: var(--radius-xl);
-        max-width: 900px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: var(--shadow-xl);
-        position: relative;
-      }
-
-      .modal-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid var(--color-border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        background: var(--color-surface);
-        z-index: 10;
-      }
-
-      .modal-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--color-text);
-      }
-
-      .modal-close {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--color-text-muted);
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: var(--radius);
-        transition: all 0.2s ease;
-      }
-
-      .modal-close:hover {
-        background: var(--color-bg-secondary);
-        color: var(--color-text);
-      }
-
-      .modal-body {
-        padding: 0;
-      }
-
-      .modal-body iframe {
-        width: 100%;
-        border: none;
-        min-height: 600px;
-      }
-
-      /* Slideshow Styles */
-      .slideshow-modal .modal-content {
-        max-width: 1200px;
-        max-height: 95vh;
-      }
-
-      .slideshow-container {
-        position: relative;
-        background: var(--color-bg-secondary);
-        min-height: 600px;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .slide {
-        display: none;
-        padding: 3rem 2rem;
-        flex: 1;
-        animation: fadeIn 0.5s ease-in-out;
-      }
-
-      .slide.active {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .slide-title {
-        font-family: "Playfair Display", serif;
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: var(--color-text);
-        margin-bottom: 1.5rem;
-        text-align: center;
-      }
-
-      .slide-subtitle {
-        font-size: 1.25rem;
-        color: var(--color-text-secondary);
-        margin-bottom: 2rem;
-        text-align: center;
-      }
-
-      .slide-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-
-      .comparison-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        margin-top: 1rem;
-      }
-
-      .comparison-section {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        padding: 1.5rem;
-        box-shadow: var(--shadow-md);
-      }
-
-      .comparison-section.top {
-        border-top: 4px solid var(--color-success);
-      }
-
-      .comparison-section.bottom {
-        border-top: 4px solid var(--color-error);
-      }
-
-      .comparison-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .comparison-title.top {
-        color: var(--color-success);
-      }
-
-      .comparison-title.bottom {
-        color: var(--color-error);
-      }
-
-      .performer-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .performer-item {
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
-        background: var(--color-bg-secondary);
-        border-radius: var(--radius);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .performer-name {
-        font-weight: 600;
-        color: var(--color-text);
-      }
-
-      .performer-score {
-        font-family: "JetBrains Mono", monospace;
-        font-weight: 700;
-        font-size: 1.1rem;
-      }
-
-      .pattern-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .pattern-item {
-        padding: 1rem;
-        margin-bottom: 1rem;
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        border-left: 4px solid var(--color-primary);
-        box-shadow: var(--shadow-sm);
-      }
-
-      .pattern-title {
-        font-weight: 700;
-        color: var(--color-text);
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-      }
-
-      .pattern-description {
-        color: var(--color-text-secondary);
-        line-height: 1.6;
-      }
-
-      .recommendation-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .recommendation-item {
-        padding: 1.25rem;
-        margin-bottom: 1rem;
-        background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-accent-light) 100%);
-        color: white;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-
-      .recommendation-number {
-        font-family: "Playfair Display", serif;
-        font-size: 2rem;
-        font-weight: 800;
-        opacity: 0.8;
-        flex-shrink: 0;
-      }
-
-      .recommendation-text {
-        flex: 1;
-        font-size: 1.05rem;
-        line-height: 1.6;
-      }
-
-      .slide-navigation {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 2rem;
-        background: var(--color-surface);
-        border-top: 1px solid var(--color-border);
-      }
-
-      .slide-counter {
-        font-family: "JetBrains Mono", monospace;
-        color: var(--color-text-muted);
-        font-weight: 600;
-      }
-
-      .slide-nav-buttons {
-        display: flex;
-        gap: 1rem;
-      }
-
-      .slide-nav-btn {
-        padding: 0.75rem 1.5rem;
-        background: var(--color-primary);
-        color: white;
-        border: none;
-        border-radius: var(--radius);
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .slide-nav-btn:hover {
-        background: var(--color-primary-dark);
-        transform: translateY(-1px);
-      }
-
-      .slide-nav-btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      .insight-card {
-        background: var(--color-surface);
-        border-radius: var(--radius-lg);
-        padding: 1.5rem;
-        box-shadow: var(--shadow-md);
-        margin-bottom: 1rem;
-      }
-
-      .insight-header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-      }
-
-      .insight-icon {
-        font-size: 2rem;
-      }
-
-      .insight-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--color-text);
-      }
-
-      .insight-body {
-        color: var(--color-text-secondary);
-        line-height: 1.7;
-        font-size: 1.05rem;
-      }
-
-      @media (min-width: 768px) {
-        body {
-          padding: 2.5rem;
-        }
-
-        .container {
-          max-width: 1400px;
-        }
-
-        .header {
-          padding: 3.5rem 2.5rem;
-          margin-bottom: 3rem;
-        }
-
-        .header h1 {
-          font-size: 3.25rem;
-        }
-
-        .header-subtitle {
-          font-size: 1.125rem;
-        }
-
-        .toolbar {
-          margin-bottom: 2rem;
-        }
-
-        table {
-          font-size: 0.95rem;
-        }
-
-        th,
-        td {
-          padding: 1.125rem 1.5rem;
-        }
-
-        .stats-grid {
-          grid-template-columns: repeat(4, 1fr);
-        }
-      }
-
-      @media (min-width: 1024px) {
-        .header h1 {
-          font-size: 3.75rem;
-        }
-      }
-
-      @media (max-width: 767px) {
-        .toolbar {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .toolbar-actions {
-          width: 100%;
-          flex-direction: column;
-        }
-
-        .search-box {
-          width: 100%;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-          width: 100%;
-          justify-content: center;
-        }
-
-        table {
-          font-size: 0.85rem;
-        }
-
-        th,
-        td {
-          padding: 0.75rem 0.875rem;
-        }
-
-        th {
-          font-size: 0.8rem;
-        }
-
-        .stat-value {
-          font-size: 1.5rem;
-        }
-
-        .comparison-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .slide-title {
-          font-size: 1.75rem;
-        }
-
-        .slide-subtitle {
-          font-size: 1rem;
-        }
-
-        .slide {
-          padding: 2rem 1rem;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-        }
-      }
-
-      ::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: var(--color-bg-secondary);
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: var(--color-border);
-        border-radius: 6px;
-        border: 3px solid var(--color-bg-secondary);
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--color-primary);
-      }
-    </style>
+    <link rel="stylesheet" href="default.css" />
   </head>
   <body>
     <div class="container">
@@ -1017,12 +62,24 @@
           <table id="callsTable">
             <thead>
               <tr>
-                <th class="sortable" data-column="id">ID</th>
-                <th class="sortable" data-column="title">Call Title</th>
-                <th class="sortable" data-column="date">Date</th>
-                <th class="sortable" data-column="sentiment">Sentiment</th>
-                <th class="sortable" data-column="duration">Duration</th>
-                <th class="sortable" data-column="rep">Rep</th>
+                <th class="sortable" data-column="row_number">ID</th>
+                <th class="sortable" data-column="message_content_call_title">
+                  Call Title
+                </th>
+                <th class="sortable" data-column="filename">File</th>
+                <th
+                  class="sortable"
+                  data-column="message_content_overall_sentiment"
+                >
+                  Sentiment
+                </th>
+                <th
+                  class="sortable"
+                  data-column="message_content_questions_quality_score"
+                >
+                  Quality
+                </th>
+                <th class="sortable" data-column="result">Result</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -1058,7 +115,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2 class="modal-title">Pattern Analysis & Insights</h2>
-          <button class="modal-close" id="closeAnalysisModal" aria-label="Close modal">
+          <button
+            class="modal-close"
+            id="closeAnalysisModal"
+            aria-label="Close modal"
+          >
             ×
           </button>
         </div>
@@ -1077,11 +138,34 @@
       </div>
     </div>
 
+    <div class="modal" id="detailModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="detailModalTitle">Call Details</h2>
+          <button
+            class="modal-close"
+            id="closeDetailModal"
+            aria-label="Close modal"
+          >
+            ×
+          </button>
+        </div>
+        <div
+          class="modal-body"
+          style="padding: 2rem; max-height: 70vh; overflow-y: auto"
+        >
+          <div id="detailModalContent"></div>
+        </div>
+      </div>
+    </div>
+
     <script>
       // Configuration - UPDATE THESE URLs
       const CONFIG = {
-        webhookUrl: "YOUR_N8N_WEBHOOK_URL_HERE", // Replace with your n8n webhook URL that returns Google Sheets data
-        formUrl: "YOUR_N8N_FORM_URL_HERE", // Replace with your n8n form URL
+        webhookUrl:
+          "https://klett-agent.app.n8n.cloud/webhook/d22b7bdf-786d-4707-ac3f-5c784ac61878",
+        formUrl:
+          "https://klett-agent.app.n8n.cloud/form/5dd5f0b9-4583-4250-98bf-e4e388219ecd",
       };
 
       // State
@@ -1107,6 +191,10 @@
       const nextSlideBtn = document.getElementById("nextSlide");
       const currentSlideSpan = document.getElementById("currentSlide");
       const totalSlidesSpan = document.getElementById("totalSlides");
+      const detailModal = document.getElementById("detailModal");
+      const closeDetailModal = document.getElementById("closeDetailModal");
+      const detailModalTitle = document.getElementById("detailModalTitle");
+      const detailModalContent = document.getElementById("detailModalContent");
       const statsElements = {
         total: document.getElementById("totalCalls"),
         positive: document.getElementById("positiveCalls"),
@@ -1123,9 +211,35 @@
           }
           const data = await response.json();
 
-          // Assuming the webhook returns an array of objects
-          // Adjust the data structure based on your actual webhook response
-          callsData = Array.isArray(data) ? data : data.items || [];
+          console.log("Raw webhook data:", data);
+          console.log("Data type:", typeof data);
+          console.log("Is array:", Array.isArray(data));
+
+          // Handle different possible response structures
+          let processedData = [];
+
+          if (Array.isArray(data)) {
+            processedData = data;
+          } else if (data && typeof data === "object") {
+            // Check for common wrapper properties
+            if (data.items && Array.isArray(data.items)) {
+              processedData = data.items;
+            } else if (data.data && Array.isArray(data.data)) {
+              processedData = data.data;
+            } else if (data.rows && Array.isArray(data.rows)) {
+              processedData = data.rows;
+            } else if (data.results && Array.isArray(data.results)) {
+              processedData = data.results;
+            } else {
+              // If it's a single object, wrap it in an array
+              processedData = [data];
+            }
+          }
+
+          console.log("Processed data:", processedData);
+          console.log("Number of items:", processedData.length);
+
+          callsData = processedData;
           filteredData = [...callsData];
 
           updateStats();
@@ -1153,7 +267,9 @@
         };
 
         callsData.forEach((call) => {
-          const sentiment = (call.sentiment || "").toLowerCase();
+          const sentiment = (
+            call.message_content_overall_sentiment || ""
+          ).toLowerCase();
           if (sentiment === "positive") stats.positive++;
           else if (sentiment === "neutral") stats.neutral++;
           else if (sentiment === "negative") stats.negative++;
@@ -1167,7 +283,10 @@
 
       // Render table
       function renderTable() {
-        if (filteredData.length === 0) {
+        console.log("Rendering table with filteredData:", filteredData);
+        console.log("filteredData.length:", filteredData.length);
+
+        if (!filteredData || filteredData.length === 0) {
           tableBody.innerHTML = `
             <tr>
               <td colspan="7" class="empty-state">
@@ -1179,25 +298,169 @@
         }
 
         tableBody.innerHTML = filteredData
-          .map(
-            (call, index) => `
+          .map((call, index) => {
+            console.log(`Rendering row ${index}:`, call);
+            return `
           <tr>
-            <td>${call.id || index + 1}</td>
-            <td>${escapeHtml(call.title || call.call_title || "Untitled Call")}</td>
-            <td>${formatDate(call.date || call.created_at)}</td>
-            <td>${renderSentimentBadge(call.sentiment || call.overall_sentiment)}</td>
-            <td>${call.duration || "N/A"}</td>
-            <td>${escapeHtml(call.rep || call.rep_name || "N/A")}</td>
+            <td>${call.row_number || index + 1}</td>
+            <td>${escapeHtml(call.message_content_call_title || "Untitled Call")}</td>
+            <td>${escapeHtml(call.filename || "N/A")}</td>
+            <td>${renderSentimentBadge(call.message_content_overall_sentiment)}</td>
+            <td>${renderQualityBadge(call.message_content_questions_quality_score)}</td>
+            <td>${renderResultBadge(call.result)}</td>
             <td>
-              <a href="${call.report_url || "#"}" class="action-link" ${!call.report_url ? 'onclick="return false;" style="opacity: 0.5; cursor: not-allowed;"' : ""}>
-                View Report →
+              <a href="#" class="action-link" onclick="showCallDetails(${index}); return false;">
+                View Details →
               </a>
             </td>
           </tr>
-        `,
-          )
+        `;
+          })
           .join("");
       }
+
+      // Show call details in modal
+      function showCallDetails(index) {
+        const call = filteredData[index];
+        detailModalTitle.textContent =
+          call.message_content_call_title || "Call Details";
+
+        const detailsHTML = `
+          <div style="display: grid; gap: 1.5rem;">
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">📋</span>
+                <h3 class="insight-title">Call Summary</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_call_summary || "No summary available")}
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+              <div class="stat-card">
+                <div class="stat-label">Rep Talk Ratio</div>
+                <div class="stat-value" style="font-size: 1.5rem;">${call.message_content_talk_ratio_rep_percent || 0}%</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Customer Talk Ratio</div>
+                <div class="stat-value" style="font-size: 1.5rem;">${call.message_content_talk_ratio_customer_percent || 0}%</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Questions</div>
+                <div class="stat-value" style="font-size: 1.5rem;">${call.message_content_questions_total || 0}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Impact Questions</div>
+                <div class="stat-value" style="font-size: 1.5rem;">${call.message_content_questions_impact_count || 0}</div>
+              </div>
+            </div>
+
+            ${
+              call.message_content_talk_ratio_analysis
+                ? `
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">💬</span>
+                <h3 class="insight-title">Talk Ratio Analysis</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_talk_ratio_analysis)}
+              </div>
+            </div>
+            `
+                : ""
+            }
+
+            ${
+              call.message_content_questions_analysis
+                ? `
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">❓</span>
+                <h3 class="insight-title">Questions Analysis</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_questions_analysis)}
+              </div>
+            </div>
+            `
+                : ""
+            }
+
+            ${
+              call.message_content_impact_questions
+                ? `
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">🎯</span>
+                <h3 class="insight-title">Impact Questions</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_impact_questions)}
+              </div>
+            </div>
+            `
+                : ""
+            }
+
+            ${
+              call.message_content_key_strengths
+                ? `
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">✅</span>
+                <h3 class="insight-title">Key Strengths</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_key_strengths)}
+              </div>
+            </div>
+            `
+                : ""
+            }
+
+            ${
+              call.message_content_key_weaknesses
+                ? `
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">⚠️</span>
+                <h3 class="insight-title">Areas for Improvement</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_key_weaknesses)}
+              </div>
+            </div>
+            `
+                : ""
+            }
+
+            ${
+              call.message_content_top_3_recommendations
+                ? `
+            <div class="insight-card">
+              <div class="insight-header">
+                <span class="insight-icon">💡</span>
+                <h3 class="insight-title">Top Recommendations</h3>
+              </div>
+              <div class="insight-body">
+                ${escapeHtml(call.message_content_top_3_recommendations)}
+              </div>
+            </div>
+            `
+                : ""
+            }
+          </div>
+        `;
+
+        detailModalContent.innerHTML = detailsHTML;
+        detailModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      // Make showCallDetails available globally
+      window.showCallDetails = showCallDetails;
 
       // Render sentiment badge
       function renderSentimentBadge(sentiment) {
@@ -1219,6 +482,45 @@
         `;
       }
 
+      // Render quality badge
+      function renderQualityBadge(quality) {
+        if (!quality) return '<span class="badge info">N/A</span>';
+
+        const qualityUpper = quality.toUpperCase();
+        let badgeClass = "neutral";
+
+        if (qualityUpper === "HIGH") badgeClass = "positive";
+        else if (qualityUpper === "LOW") badgeClass = "negative";
+        else if (qualityUpper === "MEDIUM") badgeClass = "neutral";
+        else badgeClass = "info";
+
+        return `
+          <span class="badge ${badgeClass}">
+            <span class="badge-dot"></span>
+            ${escapeHtml(quality)}
+          </span>
+        `;
+      }
+
+      // Render result badge
+      function renderResultBadge(result) {
+        if (!result) return '<span class="badge info">N/A</span>';
+
+        const resultLower = result.toLowerCase();
+        let badgeClass = "neutral";
+
+        if (resultLower === "yes") badgeClass = "positive";
+        else if (resultLower === "no") badgeClass = "negative";
+        else badgeClass = "neutral";
+
+        return `
+          <span class="badge ${badgeClass}">
+            <span class="badge-dot"></span>
+            ${escapeHtml(result)}
+          </span>
+        `;
+      }
+
       // Format date
       function formatDate(dateString) {
         if (!dateString) return "N/A";
@@ -1236,6 +538,7 @@
 
       // Escape HTML to prevent XSS
       function escapeHtml(text) {
+        if (!text) return "";
         const div = document.createElement("div");
         div.textContent = text;
         return div.innerHTML;
@@ -1250,16 +553,17 @@
         } else {
           filteredData = callsData.filter((call) => {
             return (
-              (call.title || call.call_title || "")
+              (call.message_content_call_title || "")
                 .toLowerCase()
                 .includes(searchTerm) ||
-              (call.rep || call.rep_name || "")
+              (call.filename || "").toLowerCase().includes(searchTerm) ||
+              (call.message_content_overall_sentiment || "")
                 .toLowerCase()
                 .includes(searchTerm) ||
-              (call.sentiment || call.overall_sentiment || "")
+              (call.message_content_call_summary || "")
                 .toLowerCase()
                 .includes(searchTerm) ||
-              (call.id || "").toString().includes(searchTerm)
+              (call.row_number || "").toString().includes(searchTerm)
             );
           });
         }
@@ -1281,12 +585,9 @@
           let bVal = b[column] || "";
 
           // Handle different data types
-          if (column === "id") {
+          if (column === "row_number") {
             aVal = parseInt(aVal) || 0;
             bVal = parseInt(bVal) || 0;
-          } else if (column === "date" || column === "created_at") {
-            aVal = new Date(aVal).getTime() || 0;
-            bVal = new Date(bVal).getTime() || 0;
           } else {
             aVal = aVal.toString().toLowerCase();
             bVal = bVal.toString().toLowerCase();
@@ -1315,93 +616,127 @@
 
       // Pattern Analysis Functions
       function analyzePatterns() {
-        if (callsData.length < 10) {
-          alert("Need at least 10 calls to perform meaningful pattern analysis.");
+        if (callsData.length < 5) {
+          alert(
+            "Need at least 5 calls to perform meaningful pattern analysis.",
+          );
           return;
         }
 
         analyzeBtn.disabled = true;
-        analyzeBtn.innerHTML = '<span>⏳</span><span>Analyzing...</span>';
+        analyzeBtn.innerHTML = "<span>⏳</span><span>Analyzing...</span>";
 
-        // Simulate analysis (in production, this would call an AI service or n8n workflow)
+        // Simulate analysis
         setTimeout(() => {
           analysisData = performPatternAnalysis();
           generateSlides();
           openAnalysisModal();
           analyzeBtn.disabled = false;
-          analyzeBtn.innerHTML = '<span>📊</span><span>Analyze Patterns</span>';
+          analyzeBtn.innerHTML = "<span>📊</span><span>Analyze Patterns</span>";
         }, 2000);
       }
 
       function performPatternAnalysis() {
-        // Calculate scores for each rep based on sentiment
-        const repScores = {};
-        
-        callsData.forEach(call => {
-          const rep = call.rep || call.rep_name || "Unknown";
-          const sentiment = (call.sentiment || call.overall_sentiment || "").toLowerCase();
-          
-          if (!repScores[rep]) {
-            repScores[rep] = { positive: 0, neutral: 0, negative: 0, total: 0 };
+        // Group calls by quality score
+        const qualityGroups = {
+          HIGH: [],
+          MEDIUM: [],
+          LOW: [],
+        };
+
+        callsData.forEach((call) => {
+          const quality = (
+            call.message_content_questions_quality_score || ""
+          ).toUpperCase();
+          if (qualityGroups[quality]) {
+            qualityGroups[quality].push(call);
           }
-          
-          repScores[rep].total++;
-          if (sentiment === "positive") repScores[rep].positive++;
-          else if (sentiment === "neutral") repScores[rep].neutral++;
-          else if (sentiment === "negative") repScores[rep].negative++;
         });
 
-        // Calculate success rate for each rep
-        const repPerformance = Object.entries(repScores).map(([rep, scores]) => ({
-          rep,
-          successRate: ((scores.positive / scores.total) * 100).toFixed(1),
-          totalCalls: scores.total,
-          positive: scores.positive,
-          neutral: scores.neutral,
-          negative: scores.negative
-        })).sort((a, b) => parseFloat(b.successRate) - parseFloat(a.successRate));
+        // Calculate average metrics for each group
+        const calculateAverage = (calls, field) => {
+          if (calls.length === 0) return 0;
+          const sum = calls.reduce(
+            (acc, call) => acc + (parseInt(call[field]) || 0),
+            0,
+          );
+          return (sum / calls.length).toFixed(1);
+        };
 
-        const top5 = repPerformance.slice(0, 5);
-        const bottom5 = repPerformance.slice(-5).reverse();
+        const highPerformers = qualityGroups.HIGH.slice(0, 5).map((call) => ({
+          title: call.message_content_call_title || "Untitled",
+          successRate: call.message_content_questions_quality_score,
+          impactQuestions: call.message_content_questions_impact_count || 0,
+          sentiment: call.message_content_overall_sentiment || "neutral",
+        }));
 
-        // Identify patterns (simplified - in production, use AI/ML)
-        const patterns = identifyPatterns(top5, bottom5);
-        const recommendations = generateRecommendations(patterns, top5, bottom5);
+        const lowPerformers = qualityGroups.LOW.slice(0, 5).map((call) => ({
+          title: call.message_content_call_title || "Untitled",
+          successRate: call.message_content_questions_quality_score,
+          impactQuestions: call.message_content_questions_impact_count || 0,
+          sentiment: call.message_content_overall_sentiment || "neutral",
+        }));
+
+        // Identify patterns
+        const patterns = identifyPatterns(qualityGroups);
+        const recommendations = generateRecommendations(
+          patterns,
+          highPerformers,
+          lowPerformers,
+        );
 
         return {
-          top5,
-          bottom5,
+          top5: highPerformers,
+          bottom5: lowPerformers,
           patterns,
           recommendations,
-          totalAnalyzed: callsData.length
+          totalAnalyzed: callsData.length,
         };
       }
 
-      function identifyPatterns(top5, bottom5) {
+      function identifyPatterns(qualityGroups) {
         const patterns = [];
 
-        // Pattern 1: Success rate difference
-        const avgTopSuccess = top5.reduce((sum, p) => sum + parseFloat(p.successRate), 0) / top5.length;
-        const avgBottomSuccess = bottom5.reduce((sum, p) => sum + parseFloat(p.successRate), 0) / bottom5.length;
-        
+        const highCount = qualityGroups.HIGH.length;
+        const mediumCount = qualityGroups.MEDIUM.length;
+        const lowCount = qualityGroups.LOW.length;
+
         patterns.push({
-          title: "Performance Gap Analysis",
-          description: `Top performers maintain an average success rate of ${avgTopSuccess.toFixed(1)}%, while bottom performers average ${avgBottomSuccess.toFixed(1)}%. This ${(avgTopSuccess - avgBottomSuccess).toFixed(1)}% gap indicates significant room for improvement through targeted training.`
+          title: "Quality Distribution Analysis",
+          description: `Out of ${callsData.length} calls analyzed: ${highCount} high quality (${((highCount / callsData.length) * 100).toFixed(1)}%), ${mediumCount} medium quality (${((mediumCount / callsData.length) * 100).toFixed(1)}%), and ${lowCount} low quality (${((lowCount / callsData.length) * 100).toFixed(1)}%). This distribution indicates ${highCount > lowCount ? "strong overall performance" : "significant room for improvement"}.`,
         });
 
-        // Pattern 2: Call volume analysis
-        const avgTopCalls = top5.reduce((sum, p) => sum + p.totalCalls, 0) / top5.length;
-        const avgBottomCalls = bottom5.reduce((sum, p) => sum + p.totalCalls, 0) / bottom5.length;
-        
+        // Analyze impact questions correlation
+        const avgHighImpact =
+          qualityGroups.HIGH.reduce(
+            (sum, call) =>
+              sum +
+              (parseInt(call.message_content_questions_impact_count) || 0),
+            0,
+          ) / (qualityGroups.HIGH.length || 1);
+        const avgLowImpact =
+          qualityGroups.LOW.reduce(
+            (sum, call) =>
+              sum +
+              (parseInt(call.message_content_questions_impact_count) || 0),
+            0,
+          ) / (qualityGroups.LOW.length || 1);
+
         patterns.push({
-          title: "Call Volume Correlation",
-          description: `Top performers handle an average of ${avgTopCalls.toFixed(0)} calls, compared to ${avgBottomCalls.toFixed(0)} for bottom performers. ${avgTopCalls > avgBottomCalls ? 'Higher call volume correlates with better performance, suggesting experienced reps develop better skills.' : 'Lower call volume among top performers suggests quality over quantity approach.'}`
+          title: "Impact Questions Correlation",
+          description: `High-quality calls average ${avgHighImpact.toFixed(1)} impact questions, while low-quality calls average ${avgLowImpact.toFixed(1)}. This ${(avgHighImpact - avgLowImpact).toFixed(1)} question difference demonstrates the importance of asking meaningful, impact-driven questions.`,
         });
 
-        // Pattern 3: Sentiment distribution
+        // Sentiment analysis
+        const positiveCount = callsData.filter(
+          (c) =>
+            (c.message_content_overall_sentiment || "").toLowerCase() ===
+            "positive",
+        ).length;
+
         patterns.push({
-          title: "Sentiment Distribution Pattern",
-          description: `Top performers convert ${((top5[0].positive / top5[0].totalCalls) * 100).toFixed(0)}% of calls to positive outcomes, while maintaining low negative rates. This suggests effective communication techniques and problem-resolution skills.`
+          title: "Sentiment Pattern",
+          description: `${((positiveCount / callsData.length) * 100).toFixed(1)}% of calls resulted in positive sentiment. High-quality questioning techniques and effective communication strategies correlate strongly with positive customer sentiment.`,
         });
 
         return patterns;
@@ -1409,11 +744,11 @@
 
       function generateRecommendations(patterns, top5, bottom5) {
         return [
-          "Implement peer mentoring program pairing top performers with those needing improvement to transfer successful communication techniques and strategies.",
-          "Develop targeted training modules focusing on the specific skills that differentiate top performers, including active listening, empathy, and solution-oriented approaches.",
-          "Create a knowledge base of successful call recordings from top performers for team members to study and learn from real examples.",
-          "Establish regular performance review sessions with personalized feedback and actionable improvement plans for each team member.",
-          "Introduce gamification elements and recognition programs to motivate continuous improvement and celebrate incremental progress across the team."
+          "Focus on increasing the number of impact questions per call. Data shows high-performing calls ask significantly more impact questions that drive meaningful conversations.",
+          "Implement training on effective questioning techniques, emphasizing open-ended questions that uncover customer needs and pain points.",
+          "Review and analyze recordings of high-quality calls to identify specific phrases, approaches, and techniques that lead to positive outcomes.",
+          "Establish quality benchmarks based on impact question count and sentiment scores, with regular coaching sessions for team members below threshold.",
+          "Create a feedback loop where representatives can learn from both successful and unsuccessful calls, focusing on continuous improvement in conversation quality.",
         ];
       }
 
@@ -1423,7 +758,7 @@
           `
             <div class="slide active">
               <div class="slide-content">
-                <h1 class="slide-title">Call Center Performance Analysis</h1>
+                <h1 class="slide-title">Call Quality Analysis</h1>
                 <p class="slide-subtitle">Pattern Recognition & Strategic Insights</p>
                 <div class="insight-card">
                   <div class="insight-header">
@@ -1431,9 +766,9 @@
                     <h3 class="insight-title">Analysis Overview</h3>
                   </div>
                   <div class="insight-body">
-                    This comprehensive analysis examines ${analysisData.totalAnalyzed} call center conversations, 
-                    identifying key performance patterns and providing actionable recommendations for team improvement.
-                    The analysis compares top and bottom performers to extract best practices and areas for development.
+                    This comprehensive analysis examines ${analysisData.totalAnalyzed} call center conversations,
+                    identifying key performance patterns based on question quality, sentiment analysis, and conversation effectiveness.
+                    The analysis compares high and low-quality calls to extract best practices and areas for development.
                   </div>
                 </div>
               </div>
@@ -1443,29 +778,45 @@
           `
             <div class="slide">
               <div class="slide-content">
-                <h2 class="slide-title">Performance Comparison</h2>
-                <p class="slide-subtitle">Top 5 vs Bottom 5 Representatives</p>
+                <h2 class="slide-title">Quality Comparison</h2>
+                <p class="slide-subtitle">High Quality vs Low Quality Calls</p>
                 <div class="comparison-grid">
                   <div class="comparison-section top">
-                    <h3 class="comparison-title top">🏆 Top Performers</h3>
+                    <h3 class="comparison-title top">🏆 High Quality Calls</h3>
                     <ul class="performer-list">
-                      ${analysisData.top5.map(p => `
+                      ${
+                        analysisData.top5.length > 0
+                          ? analysisData.top5
+                              .map(
+                                (p) => `
                         <li class="performer-item">
-                          <span class="performer-name">${escapeHtml(p.rep)}</span>
-                          <span class="performer-score" style="color: var(--color-success);">${p.successRate}%</span>
+                          <span class="performer-name">${escapeHtml(p.title)}</span>
+                          <span class="performer-score" style="color: var(--color-success);">${p.impactQuestions} impact Q's</span>
                         </li>
-                      `).join('')}
+                      `,
+                              )
+                              .join("")
+                          : '<li class="performer-item"><span class="performer-name">No high-quality calls found</span></li>'
+                      }
                     </ul>
                   </div>
                   <div class="comparison-section bottom">
                     <h3 class="comparison-title bottom">📉 Needs Improvement</h3>
                     <ul class="performer-list">
-                      ${analysisData.bottom5.map(p => `
+                      ${
+                        analysisData.bottom5.length > 0
+                          ? analysisData.bottom5
+                              .map(
+                                (p) => `
                         <li class="performer-item">
-                          <span class="performer-name">${escapeHtml(p.rep)}</span>
-                          <span class="performer-score" style="color: var(--color-error);">${p.successRate}%</span>
+                          <span class="performer-name">${escapeHtml(p.title)}</span>
+                          <span class="performer-score" style="color: var(--color-error);">${p.impactQuestions} impact Q's</span>
                         </li>
-                      `).join('')}
+                      `,
+                              )
+                              .join("")
+                          : '<li class="performer-item"><span class="performer-name">No low-quality calls found</span></li>'
+                      }
                     </ul>
                   </div>
                 </div>
@@ -1479,29 +830,37 @@
                 <h2 class="slide-title">Key Patterns Identified</h2>
                 <p class="slide-subtitle">Data-Driven Insights from Conversation Analysis</p>
                 <ul class="pattern-list">
-                  ${analysisData.patterns.map(pattern => `
+                  ${analysisData.patterns
+                    .map(
+                      (pattern) => `
                     <li class="pattern-item">
                       <div class="pattern-title">${escapeHtml(pattern.title)}</div>
                       <div class="pattern-description">${escapeHtml(pattern.description)}</div>
                     </li>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                 </ul>
               </div>
             </div>
           `,
-          // Slide 4: Recommendations
+          //Slide 4: Recommendations
           `
             <div class="slide">
               <div class="slide-content">
                 <h2 class="slide-title">Strategic Recommendations</h2>
-                <p class="slide-subtitle">Action Plan for Performance Improvement</p>
+                <p class="slide-subtitle">Action Plan for Quality Improvement</p>
                 <ul class="recommendation-list">
-                  ${analysisData.recommendations.map((rec, idx) => `
+                  ${analysisData.recommendations
+                    .map(
+                      (rec, idx) => `
                     <li class="recommendation-item">
                       <div class="recommendation-number">${idx + 1}</div>
                       <div class="recommendation-text">${escapeHtml(rec)}</div>
                     </li>
-                  `).join('')}
+                  `,
+                    )
+                    .join("")}
                 </ul>
               </div>
             </div>
@@ -1518,41 +877,46 @@
                     <h3 class="insight-title">Immediate Actions</h3>
                   </div>
                   <div class="insight-body">
-                    <strong>Week 1-2:</strong> Schedule one-on-one meetings with bottom performers to discuss findings and create personalized improvement plans.
+                    <strong>Week 1-2:</strong> Review high-quality call recordings and document effective questioning techniques and conversation patterns.
                     <br><br>
-                    <strong>Week 3-4:</strong> Launch peer mentoring program and begin recording best practice examples from top performers.
+                    <strong>Week 3-4:</strong> Conduct training sessions focused on impact questions and implement quality scoring for all calls.
                     <br><br>
-                    <strong>Month 2:</strong> Implement training modules and establish regular performance tracking to measure improvement.
+                    <strong>Month 2:</strong> Establish peer review sessions where team members analyze calls together and share best practices.
                     <br><br>
-                    <strong>Ongoing:</strong> Monthly analysis reviews to track progress and adjust strategies based on results.
+                    <strong>Ongoing:</strong> Weekly quality reviews and monthly pattern analysis to track improvement and adjust training focus.
                   </div>
                 </div>
               </div>
             </div>
-          `
+          `,
         ];
 
-        slideshowContainer.innerHTML = slides.join('');
+        slideshowContainer.innerHTML = slides.join("");
         totalSlidesSpan.textContent = slides.length;
         currentSlideIndex = 0;
         updateSlideNavigation();
       }
 
       function openAnalysisModal() {
-        analysisModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        analysisModal.classList.add("active");
+        document.body.style.overflow = "hidden";
       }
 
       function closeAnalysisModalFunc() {
-        analysisModal.classList.remove('active');
-        document.body.style.overflow = '';
+        analysisModal.classList.remove("active");
+        document.body.style.overflow = "";
         currentSlideIndex = 0;
       }
 
+      function closeDetailModalFunc() {
+        detailModal.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
       function showSlide(index) {
-        const slides = slideshowContainer.querySelectorAll('.slide');
+        const slides = slideshowContainer.querySelectorAll(".slide");
         slides.forEach((slide, i) => {
-          slide.classList.toggle('active', i === index);
+          slide.classList.toggle("active", i === index);
         });
         currentSlideIndex = index;
         currentSlideSpan.textContent = index + 1;
@@ -1560,13 +924,13 @@
       }
 
       function updateSlideNavigation() {
-        const slides = slideshowContainer.querySelectorAll('.slide');
+        const slides = slideshowContainer.querySelectorAll(".slide");
         prevSlideBtn.disabled = currentSlideIndex === 0;
         nextSlideBtn.disabled = currentSlideIndex === slides.length - 1;
       }
 
       function nextSlide() {
-        const slides = slideshowContainer.querySelectorAll('.slide');
+        const slides = slideshowContainer.querySelectorAll(".slide");
         if (currentSlideIndex < slides.length - 1) {
           showSlide(currentSlideIndex + 1);
         }
@@ -1580,6 +944,7 @@
 
       // Modal functions
       function openModal() {
+        console.log("Opening modal with form URL:", CONFIG.formUrl);
         formIframe.src = CONFIG.formUrl;
         formModal.classList.add("active");
         document.body.style.overflow = "hidden";
@@ -1606,6 +971,7 @@
       analyzeBtn.addEventListener("click", analyzePatterns);
       closeModal.addEventListener("click", closeModalFunc);
       closeAnalysisModal.addEventListener("click", closeAnalysisModalFunc);
+      closeDetailModal.addEventListener("click", closeDetailModalFunc);
       prevSlideBtn.addEventListener("click", prevSlide);
       nextSlideBtn.addEventListener("click", nextSlide);
 
@@ -1617,12 +983,18 @@
         if (e.target === analysisModal) closeAnalysisModalFunc();
       });
 
+      detailModal.addEventListener("click", (e) => {
+        if (e.target === detailModal) closeDetailModalFunc();
+      });
+
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           if (formModal.classList.contains("active")) {
             closeModalFunc();
           } else if (analysisModal.classList.contains("active")) {
             closeAnalysisModalFunc();
+          } else if (detailModal.classList.contains("active")) {
+            closeDetailModalFunc();
           }
         } else if (analysisModal.classList.contains("active")) {
           if (e.key === "ArrowRight") nextSlide();
