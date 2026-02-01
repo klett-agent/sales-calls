@@ -93,24 +93,6 @@
       </div>
     </div>
 
-    <div class="modal" id="formModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title">Create New Audio Transcription</h2>
-          <button class="modal-close" id="closeModal" aria-label="Close modal">
-            ×
-          </button>
-        </div>
-        <div class="modal-body">
-          <iframe
-            id="formIframe"
-            src=""
-            title="New Transcription Form"
-          ></iframe>
-        </div>
-      </div>
-    </div>
-
     <div class="modal slideshow-modal" id="analysisModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -181,9 +163,6 @@
       const searchInput = document.getElementById("searchInput");
       const newCallBtn = document.getElementById("newCallBtn");
       const analyzeBtn = document.getElementById("analyzeBtn");
-      const formModal = document.getElementById("formModal");
-      const closeModal = document.getElementById("closeModal");
-      const formIframe = document.getElementById("formIframe");
       const analysisModal = document.getElementById("analysisModal");
       const closeAnalysisModal = document.getElementById("closeAnalysisModal");
       const slideshowContainer = document.getElementById("slideshowContainer");
@@ -943,19 +922,11 @@
       }
 
       // Modal functions
-      function openModal() {
-        console.log("Opening modal with form URL:", CONFIG.formUrl);
-        formIframe.src = CONFIG.formUrl;
-        formModal.classList.add("active");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeModalFunc() {
-        formModal.classList.remove("active");
-        formIframe.src = "";
-        document.body.style.overflow = "";
-        // Refresh data after form submission
-        setTimeout(() => fetchData(), 1000);
+      function openNewTranscriptionForm() {
+        console.log("Opening form in new window:", CONFIG.formUrl);
+        window.open(CONFIG.formUrl, '_blank', 'noopener,noreferrer');
+        // Refresh data after a delay to allow form submission
+        setTimeout(() => fetchData(), 3000);
       }
 
       // Event listeners
@@ -967,17 +938,12 @@
         th.addEventListener("click", () => sortTable(th.dataset.column));
       });
 
-      newCallBtn.addEventListener("click", openModal);
+      newCallBtn.addEventListener("click", openNewTranscriptionForm);
       analyzeBtn.addEventListener("click", analyzePatterns);
-      closeModal.addEventListener("click", closeModalFunc);
       closeAnalysisModal.addEventListener("click", closeAnalysisModalFunc);
       closeDetailModal.addEventListener("click", closeDetailModalFunc);
       prevSlideBtn.addEventListener("click", prevSlide);
       nextSlideBtn.addEventListener("click", nextSlide);
-
-      formModal.addEventListener("click", (e) => {
-        if (e.target === formModal) closeModalFunc();
-      });
 
       analysisModal.addEventListener("click", (e) => {
         if (e.target === analysisModal) closeAnalysisModalFunc();
@@ -989,9 +955,7 @@
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
-          if (formModal.classList.contains("active")) {
-            closeModalFunc();
-          } else if (analysisModal.classList.contains("active")) {
+          if (analysisModal.classList.contains("active")) {
             closeAnalysisModalFunc();
           } else if (detailModal.classList.contains("active")) {
             closeDetailModalFunc();
@@ -999,16 +963,6 @@
         } else if (analysisModal.classList.contains("active")) {
           if (e.key === "ArrowRight") nextSlide();
           else if (e.key === "ArrowLeft") prevSlide();
-        }
-      });
-
-      // Listen for form submission from iframe
-      window.addEventListener("message", (event) => {
-        if (
-          event.data === "formSubmitted" ||
-          event.data.type === "formSubmitted"
-        ) {
-          closeModalFunc();
         }
       });
 
