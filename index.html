@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Call Center Analysis</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-light: #3b82f6;
+        --color-primary-dark: #1e40af;
+        --color-accent: #7c3aed;
+        --color-accent-light: #8b5cf6;
+        --color-bg: #ffffff;
+        --color-bg-secondary: #f8fafc;
+        --color-bg-tertiary: #f1f5f9;
+        --color-surface: #ffffff;
+        --color-text: #0f172a;
+        --color-text-secondary: #475569;
+        --color-text-muted: #64748b;
+        --color-border: #e2e8f0;
+        --color-border-light: #f1f5f9;
+        --color-success: #059669;
+        --color-success-light: #d1fae5;
+        --color-success-bg: #ecfdf5;
+        --color-warning: #d97706;
+        --color-warning-light: #fef3c7;
+        --color-warning-bg: #fffbeb;
+        --color-error: #dc2626;
+        --color-error-light: #fee2e2;
+        --color-error-bg: #fef2f2;
+        --color-info: #0284c7;
+        --color-info-light: #dbeafe;
+        --color-info-bg: #f0f9ff;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow:
+          0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        --shadow-md:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        --shadow-lg:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        --shadow-xl:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        --radius-sm: 0.375rem;
+        --radius: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        color: var(--color-text);
+        min-height: 100vh;
+        padding: 1.5rem;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border-radius: var(--radius-xl);
+        padding: 2.5rem 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-xl);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--color-primary),
+          var(--color-accent),
+          var(--color-primary)
+        );
+        background-size: 200% 100%;
+        animation: shimmer 3s linear infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 0.75rem;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+
+      .header-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .search-box {
+        flex: 1;
+        min-width: 200px;
+        position: relative;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 0.875rem 1rem 0.875rem 2.75rem;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        color: var(--color-text);
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .search-box::before {
+        content: "🔍";
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        pointer-events: none;
+      }
+
+      .toolbar-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-primary {
+        padding: 0.875rem 1.75rem;
+        background: linear-gradient(
+          135deg,
+          var(--color-primary) 0%,
+          var(--color-accent) 100%
+        );
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-md);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+      }
+
+      .btn-primary:active {
+        transform: scale(0.98);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-secondary {
+        padding: 0.875rem 1.75rem;
+        background: linear-gradient(
+          135deg,
+          var(--color-accent) 0%,
+          var(--color-accent-light) 100%
+        );
+        color: white;
+        border: none;
+        border-radius: var(--radius-lg);
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-md);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.4);
+      }
+
+      .btn-secondary:active {
+        transform: scale(0.98);
+      }
+
+      .btn-secondary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 0;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+      }
+
+      .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+
+      thead {
+        background: var(--color-bg-secondary);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      th {
+        padding: 1rem 1.25rem;
+        text-align: left;
+        font-weight: 700;
+        color: var(--color-text);
+        border-bottom: 2px solid var(--color-border);
+        white-space: nowrap;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      th:hover {
+        background: var(--color-bg-tertiary);
+        color: var(--color-primary);
+      }
+
+      th.sortable::after {
+        content: "⇅";
+        margin-left: 0.5rem;
+        opacity: 0.3;
+        font-size: 0.875rem;
+      }
+
+      th.sort-asc::after {
+        content: "↑";
+        opacity: 1;
+        color: var(--color-primary);
+      }
+
+      th.sort-desc::after {
+        content: "↓";
+        opacity: 1;
+        color: var(--color-primary);
+      }
+
+      tbody tr {
+        border-bottom: 1px solid var(--color-border-light);
+        transition: all 0.2s ease;
+      }
+
+      tbody tr:hover {
+        background: var(--color-bg-secondary);
+      }
+
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: 1rem 1.25rem;
+        color: var(--color-text-secondary);
+        vertical-align: middle;
+      }
+
+      td:first-child {
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: var(--radius);
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+
+      .badge.positive {
+        background: var(--color-success-bg);
+        color: var(--color-success);
+        border-color: var(--color-success-light);
+      }
+
+      .badge.negative {
+        background: var(--color-error-bg);
+        color: var(--color-error);
+        border-color: var(--color-error-light);
+      }
+
+      .badge.neutral {
+        background: var(--color-warning-bg);
+        color: var(--color-warning);
+        border-color: var(--color-warning-light);
+      }
+
+      .badge.info {
+        background: var(--color-info-bg);
+        color: var(--color-info);
+        border-color: var(--color-info-light);
+      }
+
+      .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .action-link {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+      }
+
+      .action-link:hover {
+        color: var(--color-primary-dark);
+        text-decoration: underline;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-muted);
+      }
+
+      .loading::after {
+        content: "";
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-left: 0.5rem;
+        border: 3px solid var(--color-border);
+        border-radius: 50%;
+        border-top-color: var(--color-primary);
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-error);
+        background: var(--color-error-bg);
+        border-radius: var(--radius);
+        margin: 1rem;
+        border: 1px solid var(--color-error-light);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--color-text-muted);
+        font-style: italic;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--color-border);
+        text-align: center;
+        transition: all 0.2s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-primary);
+      }
+
+      .stat-value {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        backdrop-filter: blur(4px);
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--color-surface);
+        border-radius: var(--radius-xl);
+        max-width: 900px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-xl);
+        position: relative;
+      }
+
+      .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        background: var(--color-surface);
+        z-index: 10;
+      }
+
+      .modal-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-text);
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--color-text-muted);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius);
+        transition: all 0.2s ease;
+      }
+
+      .modal-close:hover {
+        background: var(--color-bg-secondary);
+        color: var(--color-text);
+      }
+
+      .modal-body {
+        padding: 0;
+      }
+
+      .modal-body iframe {
+        width: 100%;
+        border: none;
+        min-height: 600px;
+      }
+
+      /* Slideshow Styles */
+      .slideshow-modal .modal-content {
+        max-width: 1200px;
+        max-height: 95vh;
+      }
+
+      .slideshow-container {
+        position: relative;
+        background: var(--color-bg-secondary);
+        min-height: 600px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .slide {
+        display: none;
+        padding: 3rem 2rem;
+        flex: 1;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .slide.active {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .slide-title {
+        font-family: "Playfair Display", serif;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--color-text);
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .slide-subtitle {
+        font-size: 1.25rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+
+      .slide-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 1rem;
+      }
+
+      .comparison-section {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+      }
+
+      .comparison-section.top {
+        border-top: 4px solid var(--color-success);
+      }
+
+      .comparison-section.bottom {
+        border-top: 4px solid var(--color-error);
+      }
+
+      .comparison-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .comparison-title.top {
+        color: var(--color-success);
+      }
+
+      .comparison-title.bottom {
+        color: var(--color-error);
+      }
+
+      .performer-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .performer-item {
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: var(--color-bg-secondary);
+        border-radius: var(--radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .performer-name {
+        font-weight: 600;
+        color: var(--color-text);
+      }
+
+      .performer-score {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      .pattern-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .pattern-item {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        border-left: 4px solid var(--color-primary);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .pattern-title {
+        font-weight: 700;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
+
+      .pattern-description {
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+      }
+
+      .recommendation-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .recommendation-item {
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-accent-light) 100%);
+        color: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .recommendation-number {
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        font-weight: 800;
+        opacity: 0.8;
+        flex-shrink: 0;
+      }
+
+      .recommendation-text {
+        flex: 1;
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .slide-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+      }
+
+      .slide-counter {
+        font-family: "JetBrains Mono", monospace;
+        color: var(--color-text-muted);
+        font-weight: 600;
+      }
+
+      .slide-nav-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .slide-nav-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .slide-nav-btn:hover {
+        background: var(--color-primary-dark);
+        transform: translateY(-1px);
+      }
+
+      .slide-nav-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .insight-card {
+        background: var(--color-surface);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 1rem;
+      }
+
+      .insight-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .insight-icon {
+        font-size: 2rem;
+      }
+
+      .insight-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-text);
+      }
+
+      .insight-body {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        font-size: 1.05rem;
+      }
+
+      @media (min-width: 768px) {
+        body {
+          padding: 2.5rem;
+        }
+
+        .container {
+          max-width: 1400px;
+        }
+
+        .header {
+          padding: 3.5rem 2.5rem;
+          margin-bottom: 3rem;
+        }
+
+        .header h1 {
+          font-size: 3.25rem;
+        }
+
+        .header-subtitle {
+          font-size: 1.125rem;
+        }
+
+        .toolbar {
+          margin-bottom: 2rem;
+        }
+
+        table {
+          font-size: 0.95rem;
+        }
+
+        th,
+        td {
+          padding: 1.125rem 1.5rem;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .header h1 {
+          font-size: 3.75rem;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .toolbar-actions {
+          width: 100%;
+          flex-direction: column;
+        }
+
+        .search-box {
+          width: 100%;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+          width: 100%;
+          justify-content: center;
+        }
+
+        table {
+          font-size: 0.85rem;
+        }
+
+        th,
+        td {
+          padding: 0.75rem 0.875rem;
+        }
+
+        th {
+          font-size: 0.8rem;
+        }
+
+        .stat-value {
+          font-size: 1.5rem;
+        }
+
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .slide-title {
+          font-size: 1.75rem;
+        }
+
+        .slide-subtitle {
+          font-size: 1rem;
+        }
+
+        .slide {
+          padding: 2rem 1rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--color-bg-secondary);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: 6px;
+        border: 3px solid var(--color-bg-secondary);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-content">
+          <h1>Call Center Analysis</h1>
+          <p class="header-subtitle">
+            Audio transcription and conversation insights dashboard
+          </p>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalCalls">0</div>
+          <div class="stat-label">Total Calls</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="positiveCalls">0</div>
+          <div class="stat-label">Positive</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="neutralCalls">0</div>
+          <div class="stat-label">Neutral</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="negativeCalls">0</div>
+          <div class="stat-label">Negative</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search calls..."
+            aria-label="Search calls"
+          />
+        </div>
+        <div class="toolbar-actions">
+          <button class="btn-secondary" id="analyzeBtn">
+            <span>📊</span>
+            <span>Analyze Patterns</span>
+          </button>
+          <button class="btn-primary" id="newCallBtn">
+            <span>➕</span>
+            <span>New Transcription</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-container">
+          <table id="callsTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-column="id">ID</th>
+                <th class="sortable" data-column="title">Call Title</th>
+                <th class="sortable" data-column="date">Date</th>
+                <th class="sortable" data-column="sentiment">Sentiment</th>
+                <th class="sortable" data-column="duration">Duration</th>
+                <th class="sortable" data-column="rep">Rep</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="7" class="loading">Loading data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="formModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Create New Audio Transcription</h2>
+          <button class="modal-close" id="closeModal" aria-label="Close modal">
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <iframe
+            id="formIframe"
+            src=""
+            title="New Transcription Form"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal slideshow-modal" id="analysisModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Pattern Analysis & Insights</h2>
+          <button class="modal-close" id="closeAnalysisModal" aria-label="Close modal">
+            ×
+          </button>
+        </div>
+        <div class="slideshow-container" id="slideshowContainer">
+          <!-- Slides will be dynamically inserted here -->
+        </div>
+        <div class="slide-navigation">
+          <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+          </div>
+          <div class="slide-nav-buttons">
+            <button class="slide-nav-btn" id="prevSlide">← Previous</button>
+            <button class="slide-nav-btn" id="nextSlide">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Configuration - UPDATE THESE URLs
+      const CONFIG = {
+        webhookUrl: "YOUR_N8N_WEBHOOK_URL_HERE", // Replace with your n8n webhook URL that returns Google Sheets data
+        formUrl: "YOUR_N8N_FORM_URL_HERE", // Replace with your n8n form URL
+      };
+
+      // State
+      let callsData = [];
+      let filteredData = [];
+      let sortColumn = null;
+      let sortDirection = "asc";
+      let currentSlideIndex = 0;
+      let analysisData = null;
+
+      // DOM Elements
+      const tableBody = document.getElementById("tableBody");
+      const searchInput = document.getElementById("searchInput");
+      const newCallBtn = document.getElementById("newCallBtn");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const formModal = document.getElementById("formModal");
+      const closeModal = document.getElementById("closeModal");
+      const formIframe = document.getElementById("formIframe");
+      const analysisModal = document.getElementById("analysisModal");
+      const closeAnalysisModal = document.getElementById("closeAnalysisModal");
+      const slideshowContainer = document.getElementById("slideshowContainer");
+      const prevSlideBtn = document.getElementById("prevSlide");
+      const nextSlideBtn = document.getElementById("nextSlide");
+      const currentSlideSpan = document.getElementById("currentSlide");
+      const totalSlidesSpan = document.getElementById("totalSlides");
+      const statsElements = {
+        total: document.getElementById("totalCalls"),
+        positive: document.getElementById("positiveCalls"),
+        neutral: document.getElementById("neutralCalls"),
+        negative: document.getElementById("negativeCalls"),
+      };
+
+      // Fetch data from n8n webhook
+      async function fetchData() {
+        try {
+          const response = await fetch(CONFIG.webhookUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+
+          // Assuming the webhook returns an array of objects
+          // Adjust the data structure based on your actual webhook response
+          callsData = Array.isArray(data) ? data : data.items || [];
+          filteredData = [...callsData];
+
+          updateStats();
+          renderTable();
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="7" class="error-message">
+                Error loading data: ${error.message}
+                <br><small>Please check your webhook URL configuration</small>
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      // Update statistics
+      function updateStats() {
+        const stats = {
+          total: callsData.length,
+          positive: 0,
+          neutral: 0,
+          negative: 0,
+        };
+
+        callsData.forEach((call) => {
+          const sentiment = (call.sentiment || "").toLowerCase();
+          if (sentiment === "positive") stats.positive++;
+          else if (sentiment === "neutral") stats.neutral++;
+          else if (sentiment === "negative") stats.negative++;
+        });
+
+        statsElements.total.textContent = stats.total;
+        statsElements.positive.textContent = stats.positive;
+        statsElements.neutral.textContent = stats.neutral;
+        statsElements.negative.textContent = stats.negative;
+      }
+
+      // Render table
+      function renderTable() {
+        if (filteredData.length === 0) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="7" class="empty-state">
+                No calls found. Click "New Transcription" to add one.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tableBody.innerHTML = filteredData
+          .map(
+            (call, index) => `
+          <tr>
+            <td>${call.id || index + 1}</td>
+            <td>${escapeHtml(call.title || call.call_title || "Untitled Call")}</td>
+            <td>${formatDate(call.date || call.created_at)}</td>
+            <td>${renderSentimentBadge(call.sentiment || call.overall_sentiment)}</td>
+            <td>${call.duration || "N/A"}</td>
+            <td>${escapeHtml(call.rep || call.rep_name || "N/A")}</td>
+            <td>
+              <a href="${call.report_url || "#"}" class="action-link" ${!call.report_url ? 'onclick="return false;" style="opacity: 0.5; cursor: not-allowed;"' : ""}>
+                View Report →
+              </a>
+            </td>
+          </tr>
+        `,
+          )
+          .join("");
+      }
+
+      // Render sentiment badge
+      function renderSentimentBadge(sentiment) {
+        if (!sentiment) return '<span class="badge info">Unknown</span>';
+
+        const sentimentLower = sentiment.toLowerCase();
+        let badgeClass = "neutral";
+
+        if (sentimentLower === "positive") badgeClass = "positive";
+        else if (sentimentLower === "negative") badgeClass = "negative";
+        else if (sentimentLower === "neutral") badgeClass = "neutral";
+        else badgeClass = "info";
+
+        return `
+          <span class="badge ${badgeClass}">
+            <span class="badge-dot"></span>
+            ${escapeHtml(sentiment)}
+          </span>
+        `;
+      }
+
+      // Format date
+      function formatDate(dateString) {
+        if (!dateString) return "N/A";
+        try {
+          const date = new Date(dateString);
+          return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        } catch (error) {
+          return dateString;
+        }
+      }
+
+      // Escape HTML to prevent XSS
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      // Search functionality
+      function handleSearch(query) {
+        const searchTerm = query.toLowerCase().trim();
+
+        if (!searchTerm) {
+          filteredData = [...callsData];
+        } else {
+          filteredData = callsData.filter((call) => {
+            return (
+              (call.title || call.call_title || "")
+                .toLowerCase()
+                .includes(searchTerm) ||
+              (call.rep || call.rep_name || "")
+                .toLowerCase()
+                .includes(searchTerm) ||
+              (call.sentiment || call.overall_sentiment || "")
+                .toLowerCase()
+                .includes(searchTerm) ||
+              (call.id || "").toString().includes(searchTerm)
+            );
+          });
+        }
+
+        renderTable();
+      }
+
+      // Sort functionality
+      function sortTable(column) {
+        if (sortColumn === column) {
+          sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+          sortColumn = column;
+          sortDirection = "asc";
+        }
+
+        filteredData.sort((a, b) => {
+          let aVal = a[column] || "";
+          let bVal = b[column] || "";
+
+          // Handle different data types
+          if (column === "id") {
+            aVal = parseInt(aVal) || 0;
+            bVal = parseInt(bVal) || 0;
+          } else if (column === "date" || column === "created_at") {
+            aVal = new Date(aVal).getTime() || 0;
+            bVal = new Date(bVal).getTime() || 0;
+          } else {
+            aVal = aVal.toString().toLowerCase();
+            bVal = bVal.toString().toLowerCase();
+          }
+
+          if (aVal < bVal) return sortDirection === "asc" ? -1 : 1;
+          if (aVal > bVal) return sortDirection === "asc" ? 1 : -1;
+          return 0;
+        });
+
+        updateSortIndicators();
+        renderTable();
+      }
+
+      // Update sort indicators
+      function updateSortIndicators() {
+        document.querySelectorAll("th.sortable").forEach((th) => {
+          th.classList.remove("sort-asc", "sort-desc");
+          if (th.dataset.column === sortColumn) {
+            th.classList.add(
+              sortDirection === "asc" ? "sort-asc" : "sort-desc",
+            );
+          }
+        });
+      }
+
+      // Pattern Analysis Functions
+      function analyzePatterns() {
+        if (callsData.length < 10) {
+          alert("Need at least 10 calls to perform meaningful pattern analysis.");
+          return;
+        }
+
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '<span>⏳</span><span>Analyzing...</span>';
+
+        // Simulate analysis (in production, this would call an AI service or n8n workflow)
+        setTimeout(() => {
+          analysisData = performPatternAnalysis();
+          generateSlides();
+          openAnalysisModal();
+          analyzeBtn.disabled = false;
+          analyzeBtn.innerHTML = '<span>📊</span><span>Analyze Patterns</span>';
+        }, 2000);
+      }
+
+      function performPatternAnalysis() {
+        // Calculate scores for each rep based on sentiment
+        const repScores = {};
+        
+        callsData.forEach(call => {
+          const rep = call.rep || call.rep_name || "Unknown";
+          const sentiment = (call.sentiment || call.overall_sentiment || "").toLowerCase();
+          
+          if (!repScores[rep]) {
+            repScores[rep] = { positive: 0, neutral: 0, negative: 0, total: 0 };
+          }
+          
+          repScores[rep].total++;
+          if (sentiment === "positive") repScores[rep].positive++;
+          else if (sentiment === "neutral") repScores[rep].neutral++;
+          else if (sentiment === "negative") repScores[rep].negative++;
+        });
+
+        // Calculate success rate for each rep
+        const repPerformance = Object.entries(repScores).map(([rep, scores]) => ({
+          rep,
+          successRate: ((scores.positive / scores.total) * 100).toFixed(1),
+          totalCalls: scores.total,
+          positive: scores.positive,
+          neutral: scores.neutral,
+          negative: scores.negative
+        })).sort((a, b) => parseFloat(b.successRate) - parseFloat(a.successRate));
+
+        const top5 = repPerformance.slice(0, 5);
+        const bottom5 = repPerformance.slice(-5).reverse();
+
+        // Identify patterns (simplified - in production, use AI/ML)
+        const patterns = identifyPatterns(top5, bottom5);
+        const recommendations = generateRecommendations(patterns, top5, bottom5);
+
+        return {
+          top5,
+          bottom5,
+          patterns,
+          recommendations,
+          totalAnalyzed: callsData.length
+        };
+      }
+
+      function identifyPatterns(top5, bottom5) {
+        const patterns = [];
+
+        // Pattern 1: Success rate difference
+        const avgTopSuccess = top5.reduce((sum, p) => sum + parseFloat(p.successRate), 0) / top5.length;
+        const avgBottomSuccess = bottom5.reduce((sum, p) => sum + parseFloat(p.successRate), 0) / bottom5.length;
+        
+        patterns.push({
+          title: "Performance Gap Analysis",
+          description: `Top performers maintain an average success rate of ${avgTopSuccess.toFixed(1)}%, while bottom performers average ${avgBottomSuccess.toFixed(1)}%. This ${(avgTopSuccess - avgBottomSuccess).toFixed(1)}% gap indicates significant room for improvement through targeted training.`
+        });
+
+        // Pattern 2: Call volume analysis
+        const avgTopCalls = top5.reduce((sum, p) => sum + p.totalCalls, 0) / top5.length;
+        const avgBottomCalls = bottom5.reduce((sum, p) => sum + p.totalCalls, 0) / bottom5.length;
+        
+        patterns.push({
+          title: "Call Volume Correlation",
+          description: `Top performers handle an average of ${avgTopCalls.toFixed(0)} calls, compared to ${avgBottomCalls.toFixed(0)} for bottom performers. ${avgTopCalls > avgBottomCalls ? 'Higher call volume correlates with better performance, suggesting experienced reps develop better skills.' : 'Lower call volume among top performers suggests quality over quantity approach.'}`
+        });
+
+        // Pattern 3: Sentiment distribution
+        patterns.push({
+          title: "Sentiment Distribution Pattern",
+          description: `Top performers convert ${((top5[0].positive / top5[0].totalCalls) * 100).toFixed(0)}% of calls to positive outcomes, while maintaining low negative rates. This suggests effective communication techniques and problem-resolution skills.`
+        });
+
+        return patterns;
+      }
+
+      function generateRecommendations(patterns, top5, bottom5) {
+        return [
+          "Implement peer mentoring program pairing top performers with those needing improvement to transfer successful communication techniques and strategies.",
+          "Develop targeted training modules focusing on the specific skills that differentiate top performers, including active listening, empathy, and solution-oriented approaches.",
+          "Create a knowledge base of successful call recordings from top performers for team members to study and learn from real examples.",
+          "Establish regular performance review sessions with personalized feedback and actionable improvement plans for each team member.",
+          "Introduce gamification elements and recognition programs to motivate continuous improvement and celebrate incremental progress across the team."
+        ];
+      }
+
+      function generateSlides() {
+        const slides = [
+          // Slide 1: Title
+          `
+            <div class="slide active">
+              <div class="slide-content">
+                <h1 class="slide-title">Call Center Performance Analysis</h1>
+                <p class="slide-subtitle">Pattern Recognition & Strategic Insights</p>
+                <div class="insight-card">
+                  <div class="insight-header">
+                    <span class="insight-icon">📊</span>
+                    <h3 class="insight-title">Analysis Overview</h3>
+                  </div>
+                  <div class="insight-body">
+                    This comprehensive analysis examines ${analysisData.totalAnalyzed} call center conversations, 
+                    identifying key performance patterns and providing actionable recommendations for team improvement.
+                    The analysis compares top and bottom performers to extract best practices and areas for development.
+                  </div>
+                </div>
+              </div>
+            </div>
+          `,
+          // Slide 2: Top vs Bottom Performers
+          `
+            <div class="slide">
+              <div class="slide-content">
+                <h2 class="slide-title">Performance Comparison</h2>
+                <p class="slide-subtitle">Top 5 vs Bottom 5 Representatives</p>
+                <div class="comparison-grid">
+                  <div class="comparison-section top">
+                    <h3 class="comparison-title top">🏆 Top Performers</h3>
+                    <ul class="performer-list">
+                      ${analysisData.top5.map(p => `
+                        <li class="performer-item">
+                          <span class="performer-name">${escapeHtml(p.rep)}</span>
+                          <span class="performer-score" style="color: var(--color-success);">${p.successRate}%</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                  <div class="comparison-section bottom">
+                    <h3 class="comparison-title bottom">📉 Needs Improvement</h3>
+                    <ul class="performer-list">
+                      ${analysisData.bottom5.map(p => `
+                        <li class="performer-item">
+                          <span class="performer-name">${escapeHtml(p.rep)}</span>
+                          <span class="performer-score" style="color: var(--color-error);">${p.successRate}%</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `,
+          // Slide 3: Identified Patterns
+          `
+            <div class="slide">
+              <div class="slide-content">
+                <h2 class="slide-title">Key Patterns Identified</h2>
+                <p class="slide-subtitle">Data-Driven Insights from Conversation Analysis</p>
+                <ul class="pattern-list">
+                  ${analysisData.patterns.map(pattern => `
+                    <li class="pattern-item">
+                      <div class="pattern-title">${escapeHtml(pattern.title)}</div>
+                      <div class="pattern-description">${escapeHtml(pattern.description)}</div>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+          `,
+          // Slide 4: Recommendations
+          `
+            <div class="slide">
+              <div class="slide-content">
+                <h2 class="slide-title">Strategic Recommendations</h2>
+                <p class="slide-subtitle">Action Plan for Performance Improvement</p>
+                <ul class="recommendation-list">
+                  ${analysisData.recommendations.map((rec, idx) => `
+                    <li class="recommendation-item">
+                      <div class="recommendation-number">${idx + 1}</div>
+                      <div class="recommendation-text">${escapeHtml(rec)}</div>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+          `,
+          // Slide 5: Summary
+          `
+            <div class="slide">
+              <div class="slide-content">
+                <h2 class="slide-title">Next Steps</h2>
+                <p class="slide-subtitle">Implementation Roadmap</p>
+                <div class="insight-card">
+                  <div class="insight-header">
+                    <span class="insight-icon">🎯</span>
+                    <h3 class="insight-title">Immediate Actions</h3>
+                  </div>
+                  <div class="insight-body">
+                    <strong>Week 1-2:</strong> Schedule one-on-one meetings with bottom performers to discuss findings and create personalized improvement plans.
+                    <br><br>
+                    <strong>Week 3-4:</strong> Launch peer mentoring program and begin recording best practice examples from top performers.
+                    <br><br>
+                    <strong>Month 2:</strong> Implement training modules and establish regular performance tracking to measure improvement.
+                    <br><br>
+                    <strong>Ongoing:</strong> Monthly analysis reviews to track progress and adjust strategies based on results.
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        ];
+
+        slideshowContainer.innerHTML = slides.join('');
+        totalSlidesSpan.textContent = slides.length;
+        currentSlideIndex = 0;
+        updateSlideNavigation();
+      }
+
+      function openAnalysisModal() {
+        analysisModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeAnalysisModalFunc() {
+        analysisModal.classList.remove('active');
+        document.body.style.overflow = '';
+        currentSlideIndex = 0;
+      }
+
+      function showSlide(index) {
+        const slides = slideshowContainer.querySelectorAll('.slide');
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+        });
+        currentSlideIndex = index;
+        currentSlideSpan.textContent = index + 1;
+        updateSlideNavigation();
+      }
+
+      function updateSlideNavigation() {
+        const slides = slideshowContainer.querySelectorAll('.slide');
+        prevSlideBtn.disabled = currentSlideIndex === 0;
+        nextSlideBtn.disabled = currentSlideIndex === slides.length - 1;
+      }
+
+      function nextSlide() {
+        const slides = slideshowContainer.querySelectorAll('.slide');
+        if (currentSlideIndex < slides.length - 1) {
+          showSlide(currentSlideIndex + 1);
+        }
+      }
+
+      function prevSlide() {
+        if (currentSlideIndex > 0) {
+          showSlide(currentSlideIndex - 1);
+        }
+      }
+
+      // Modal functions
+      function openModal() {
+        formIframe.src = CONFIG.formUrl;
+        formModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModalFunc() {
+        formModal.classList.remove("active");
+        formIframe.src = "";
+        document.body.style.overflow = "";
+        // Refresh data after form submission
+        setTimeout(() => fetchData(), 1000);
+      }
+
+      // Event listeners
+      searchInput.addEventListener("input", (e) =>
+        handleSearch(e.target.value),
+      );
+
+      document.querySelectorAll("th.sortable").forEach((th) => {
+        th.addEventListener("click", () => sortTable(th.dataset.column));
+      });
+
+      newCallBtn.addEventListener("click", openModal);
+      analyzeBtn.addEventListener("click", analyzePatterns);
+      closeModal.addEventListener("click", closeModalFunc);
+      closeAnalysisModal.addEventListener("click", closeAnalysisModalFunc);
+      prevSlideBtn.addEventListener("click", prevSlide);
+      nextSlideBtn.addEventListener("click", nextSlide);
+
+      formModal.addEventListener("click", (e) => {
+        if (e.target === formModal) closeModalFunc();
+      });
+
+      analysisModal.addEventListener("click", (e) => {
+        if (e.target === analysisModal) closeAnalysisModalFunc();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (formModal.classList.contains("active")) {
+            closeModalFunc();
+          } else if (analysisModal.classList.contains("active")) {
+            closeAnalysisModalFunc();
+          }
+        } else if (analysisModal.classList.contains("active")) {
+          if (e.key === "ArrowRight") nextSlide();
+          else if (e.key === "ArrowLeft") prevSlide();
+        }
+      });
+
+      // Listen for form submission from iframe
+      window.addEventListener("message", (event) => {
+        if (
+          event.data === "formSubmitted" ||
+          event.data.type === "formSubmitted"
+        ) {
+          closeModalFunc();
+        }
+      });
+
+      // Auto-refresh data every 30 seconds
+      setInterval(fetchData, 30000);
+
+      // Initial load
+      fetchData();
+    </script>
+  </body>
+</html>

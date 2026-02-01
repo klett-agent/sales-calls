@@ -1,0 +1,274 @@
+
+# 2026-01-30 20:00:32.692220
++working on GPT-4O system prompt saved in get_insights.system-prompt.json, change so the structure return only important conclusions in stable and always the same output. here are the details this need to provide in json format as flat as possible, analysis on the calls on the following criteria: Talk-to-listen ratio: it will calculate who dominated the conversation (rep vs customer), Question quality & quantity: it will count how many questions were asked and distinguish between "surface" questions and "impact" questions, Topic segmentation: it will track how much time was spent on specific topics, Sentiment & objection handling: it will analyze emotional spikes like did the customer's sentiment drop when specific information was mentioned and how did the rep respond
+
+# 2026-01-30 20:01:10.177466
++Yes
+
+# 2026-01-30 20:04:41.424324
++also add part when it do identify the patters from the content of conversations. These patterns can reffer to presentation / feature properties and mentions, additional perks or benefits mention, price mentions, next step / follow-up mentions etc. I'm not sure how your sales call looks like so I'm guessing here.
+
+# 2026-01-30 20:10:59.065500
++you can completely change the display_results.text.html design to look more light, also present all the data from get_insights.json example response in most beautyful typographic, mobile responsive page
+
+# 2026-01-30 20:12:51.053443
++Yes
+
+# 2026-01-30 20:15:55.304289
++all your variables are failing because you use {{ $json[0].message.content.call_title || 'Call Analysis Report' }} and it should be fixed to this approach {{ $json.message.content.call_title }} which is valid
+
+# 2026-01-30 20:18:26.214829
++n
+
+# 2026-01-30 20:19:51.756237
++/add form_submission.custom-form-styling.css
+
+# 2026-01-30 20:20:12.942853
++adjust form_submission.custom-form-styling.css to match the style of display_results.text.html 
+
+# 2026-01-30 21:22:08.737399
++use {{ $('On form submission').item.json.result }} if `Yes` to make the statement this was successuful sales call or if `No` this was not successuful sales call. 
+
+# 2026-01-30 21:22:14.045541
++yes
+
+# 2026-01-30 21:22:35.706482
++No
+
+# 2026-01-30 21:26:31.411660
++add $('On form submission').item.json.result to the get_insights.system-prompt.json so it can be directed with the correct information about this call was about success, making a deal or not. this should steer the whole summary, analisys and the recomendations. this will tell if this was good call, successuful sales or not
+
+# 2026-01-30 21:28:10.314667
++it is like this {{ ($('On form submission').item.json.result === 'Yes' ? 'This was a successful sales call.' : 'This was not a successful sales call.') }} put it at the beggining so it can make opinion. The recommendations be tailored based on success/failure!
+
+# 2026-01-30 21:30:56.798336
++ok, change it a bit, make the prompt more like, if This was a successful sales call you look at the analisys as source of wisdom, and good things. if This was not a successful sales call then again take this into analisys to have better understanding why this made inpact. You can remove this part {{ ($('On form submission').item.json.result === 'Yes' ? 'This was a successful sales call.' : 'This was not a successful sales call.') }} just say in words that if this then that..
+
+# 2026-01-30 21:32:42.721983
++I've changed it a bit, see if it need better framing based on my new content
+
+# 2026-01-30 21:43:15.136731
++we have 2 radio buttons yes and no, can this looks more like wide on off button?
+
+# 2026-01-31 11:08:12.538901
++make the display results and on form submission style look as state of art professional analysis 
+
+# 2026-01-31 11:21:21.012615
++N
+
+# 2026-01-31 11:21:25.299878
++make the display results and on form submission style look as state of art professional analysis 
+
+# 2026-01-31 11:43:34.027043
++style submit.form.json and display.results.json in similar analytical professional style. 
+
+# 2026-01-31 11:45:03.688354
++improve styling of display_results.text.html and form_submission.custom-form-styling.css so it looks very professional style for analytical reports
+
+# 2026-01-31 11:48:15.358916
++n
+
+# 2026-02-01 10:32:30.157535
++create index.html web page with same `style` from form.results.html and form.css. this page should be responsive for mobile and looking in same style as other pages. this index page need to have responsive table that will get items from n8n weebhook presenting items from google spreed sheet. table should be sortable. title is Call Center Analysis and there should be button that will pop up n8n form for creation of new item to create new Audio Transcription & Summary
+
+# 2026-02-01 10:34:31.309432
++Yes
+
+# 2026-02-01 10:35:50.792347
++no need for neutral calls
+
+# 2026-02-01 10:49:34.789415
++add button for starting identification of the patters from the content of conversations where syste will makes conclusions and recommendations based on patterns recognized and comparing top 5 and low 5. end result after analisys will be delivered conclusions in slide-fashion for sales manager.
+
+# 2026-02-01 10:52:40.336201
++Yes
+
+# 2026-02-01 12:17:44.674347
++l
+
+# 2026-02-01 12:19:40.451062
++make the csv headers based on response [
++  {
++    "index": 0,
++    "message.role": "assistant",
++    "message.content.call_title": "Book order discussion and pricing negotiation",
++    "message.content.call_summary": "The sales representative discussed book pricing and orders with a teacher. They successfully navigated pricing tiers and established follow-up actions.",
++    "message.content.overall_sentiment": "positive",
++    "message.content.talk_ratio_rep_percent": 45,
++    "message.content.talk_ratio_customer_percent": 55,
++    "message.content.talk_ratio_analysis": "The customer talked slightly more, indicating engagement in the discussion. The balance was appropriate for establishing needs and commitments.",
++    "message.content.questions_total": 10,
++    "message.content.questions_surface_count": 3,
++    "message.content.questions_impact_count": 7,
++    "message.content.questions_quality_score": "HIGH",
++    "message.content.questions_analysis": "The rep effectively asked impact questions to understand the customer's specific needs and order quantities, leading to a clear action plan.",
++    "message.content.surface_questions": [
++      "How are you?",
++      "Do you have questions about our materials?"
++    ],
++    "message.content.impact_questions": [
++      "What is your expected number of copies?",
++      "Do you need more details about the expedited exam preparation version?"
++    ],
++    "message.content.topics": [
++      {
++        "topic_name": "Pricing discussion",
++        "time_percent": 30,
++        "sentiment": "neutral"
++      },
++      {
++        "topic_name": "Product features",
++        "time_percent": 25,
++        "sentiment": "positive"
++      }
++    ],
++    "message.content.sentiment_moments": [
++      {
++        "when": "When pricing was mentioned",
++        "customer_sentiment_before": "neutral",
++        "customer_sentiment_after": "positive",
++        "trigger": "Discount for bulk orders",
++        "rep_response": "Explained pricing tiers and discounts",
++        "response_effectiveness": "EXCELLENT"
++      }
++    ],
++    "message.content.objections": [
++      {
++        "objection": "Price is too high",
++        "rep_response": "Highlighted discounts and value for bulk purchases",
++        "outcome": "resolved"
++      }
++    ],
++    "message.content.conversation_patterns.feature_presentations": [
++      {
++        "feature_name": "Rapid exam preparation book",
++        "how_presented": "Explanation and use cases",
++        "customer_reaction": "Interested and requested ordering details",
++        "effectiveness": "EXCELLENT"
++      }
++    ],
++    "message.content.conversation_patterns.pricing_mentions": [
++      {
++        "pricing_type": "Bulk pricing tiers",
++        "context": "Discussed after interest in ordering was gauged",
++        "customer_reaction": "Accepted and planned order",
++        "timing_assessment": "APPROPRIATE"
++      }
++    ],
++    "message.content.conversation_patterns.benefits_and_perks": [
++      {
++        "benefit_type": "Bulk order discount",
++        "when_mentioned": "During pricing discussion",
++        "impact": "Encouraged larger order"
++      }
++    ],
++    "message.content.conversation_patterns.next_steps_and_followups": [
++      {
++        "action_item": "Confirm quantities for order",
++        "owner": "Teacher",
++        "timeline": "Next week",
++        "commitment_level": "STRONG"
++      }
++    ],
++    "message.content.conversation_patterns.recurring_themes": [
++      {
++        "theme": "Bulk discount advantages",
++        "frequency": 3,
++        "importance": "HIGH",
++        "resolution_status": "Addressed with pricing structure explanation"
++      }
++    ],
++    "message.content.key_strengths": [
++      "Effectively handled pricing inquiries with clear explanations",
++      "Built strong rapport with the customer by acknowledging their needs",
++      "Established concrete follow-up actions to secure sale"
++    ],
++    "message.content.key_weaknesses": [],
++    "message.content.top_3_recommendations": [
++      "Continue leveraging bulk discounts to close sales",
++      "Further explore customer needs for customized solutions",
++      "Maintain follow-up commitments to strengthen customer relationships"
++    ],
++    "message.refusal": null,
++    "message.annotations": [],
++    "logprobs": null,
++    "finish_reason": "stop"
++  }
++]
+
+# 2026-02-01 12:30:40.856516
++create webpage to show results of individual analysis when clicked on the list based on sales-calls.csv. the index.html should show most important collumns from sales-calls.csv. index.html will get this results from n8n webhook. 
+
+# 2026-02-01 12:42:20.415970
++improve this flattten function so it flatten in a coneptiual good data model for this usecase. we are reading csv for tables, we will do ai analysis on top of all responses
+
+# 2026-02-01 12:44:47.280861
++why I do see this kind of results in n8n web interface as result message_content_topics
++[object Object], [object Object]
++message_content_sentiment_moments
++[object Object]
+
+# 2026-02-01 12:45:52.837359
++/add sales-calls.csv
+
+# 2026-02-01 12:45:58.711580
++update csv [
++  {
++    "index": 0,
++    "message_role": "assistant",
++    "message_content_call_title": "Successful Call with Professor Sibel Regarding Educational Materials",
++    "message_content_call_summary": "A sales representative from ArtGlet engaged with professor Sibel about educational materials, discussing pricing and product features. The call concluded with an agreement to follow up with more details next week.",
++    "message_content_overall_sentiment": "positive",
++    "message_content_talk_ratio_rep_percent": 45,
++    "message_content_talk_ratio_customer_percent": 55,
++    "message_content_talk_ratio_analysis": "The call featured a balanced conversation, with the customer slightly dominating the dialogue, which is appropriate for uncovering needs and preferences.",
++    "message_content_questions_total": 10,
++    "message_content_questions_surface_count": 3,
++    "message_content_questions_impact_count": 7,
++    "message_content_questions_quality_score": "HIGH",
++    "message_content_questions_analysis": "The representative effectively used impact questions to uncover specific needs and preferences related to educational materials and pricing strategies.",
++    "message_content_surface_questions": "How are you?, Can I give you more details?, What did I send you?",
++    "message_content_impact_questions": "Have you presented the materials to the students?, Do you have the short essay version for the twelfth grade?, How many copies are you interested in?",
++    "message_content_topics_0_topic_name": "Pricing discussion",
++    "message_content_topics_0_time_percent": 30,
++    "message_content_topics_0_sentiment": "neutral",
++    "message_content_topics_1_topic_name": "Product features",
++    "message_content_topics_1_time_percent": 25,
++    "message_content_topics_1_sentiment": "positive",
++    "message_content_sentiment_moments_0_when": "When pricing was mentioned",
++    "message_content_sentiment_moments_0_customer_sentiment_before": "positive",
++    "message_content_sentiment_moments_0_customer_sentiment_after": "concerned",
++    "message_content_sentiment_moments_0_trigger": "Discount structures and quantity pricing were discussed",
++    "message_content_sentiment_moments_0_rep_response": "Explain discount benefits at different volume levels",
++    "message_content_sentiment_moments_0_response_effectiveness": "EXCELLENT",
++    "message_content_objections_0_objection": "Price is too high",
++    "message_content_objections_0_rep_response": "Focused on the value of educational benefits and discounts for bulk orders",
++    "message_content_objections_0_outcome": "resolved",
++    "message_content_conversation_patterns_feature_presentations_0_feature_name": "Rapid Essay Version",
++    "message_content_conversation_patterns_feature_presentations_0_how_presented": "Described verbally with emphasis on preparation speed for exams",
++    "message_content_conversation_patterns_feature_presentations_0_customer_reaction": "Interested and considered adoption for students",
++    "message_content_conversation_patterns_feature_presentations_0_effectiveness": "EXCELLENT",
++    "message_content_conversation_patterns_pricing_mentions_0_pricing_type": "Bulk purchase discounts",
++    "message_content_conversation_patterns_pricing_mentions_0_context": "Discussed when customer expressed interest in multiple copies",
++    "message_content_conversation_patterns_pricing_mentions_0_customer_reaction": "Receptive and understanding",
++    "message_content_conversation_patterns_pricing_mentions_0_timing_assessment": "APPROPRIATE",
++    "message_content_conversation_patterns_benefits_and_perks_0_benefit_type": "Discount for bulk orders",
++    "message_content_conversation_patterns_benefits_and_perks_0_when_mentioned": "During pricing discussion",
++    "message_content_conversation_patterns_benefits_and_perks_0_impact": "Encouraged larger order volume",
++    "message_content_conversation_patterns_next_steps_and_followups_0_action_item": "Determine exact number of copies needed",
++    "message_content_conversation_patterns_next_steps_and_followups_0_owner": "Professor Sibel",
++    "message_content_conversation_patterns_next_steps_and_followups_0_timeline": "Next week",
++    "message_content_conversation_patterns_next_steps_and_followups_0_commitment_level": "STRONG",
++    "message_content_conversation_patterns_recurring_themes_0_theme": "Educational preparation materials",
++    "message_content_conversation_patterns_recurring_themes_0_frequency": 4,
++    "message_content_conversation_patterns_recurring_themes_0_importance": "HIGH",
++    "message_content_conversation_patterns_recurring_themes_0_resolution_status": "Aligned products with needs",
++    "message_content_key_strengths": "Effective use of impact questions to identify needs, Clear explanation of pricing structures and benefits, Strong follow-up commitment for order confirmation",
++    "message_content_key_weaknesses": "Initial complexity of pricing explanation, Delayed introduction of all available products",
++    "message_content_top_3_recommendations": "Continue using impact questions to drive understanding of customer needs, Streamline pricing explanations for clarity, Ensure all relevant products are introduced in initial discussions",
++    "message_refusal": null,
++    "message_annotations": null,
++    "logprobs": null,
++    "finish_reason": "stop"
++  }
++]
