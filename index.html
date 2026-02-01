@@ -59,10 +59,9 @@
 
       <div class="card">
         <div class="table-container">
-          <table id="callsTable">
+          <table id="callsTable" class="desktop-table">
             <thead>
               <tr>
-                <th class="sortable" data-column="row_number">ID</th>
                 <th class="sortable" data-column="message_content_call_title">
                   Call Title
                 </th>
@@ -85,10 +84,13 @@
             </thead>
             <tbody id="tableBody">
               <tr>
-                <td colspan="7" class="loading">Loading data...</td>
+                <td colspan="6" class="loading">Loading data...</td>
               </tr>
             </tbody>
           </table>
+          <div id="mobileCards" class="mobile-cards">
+            <div class="loading">Loading data...</div>
+          </div>
         </div>
       </div>
     </div>
@@ -141,6 +143,138 @@
       </div>
     </div>
 
+    <style>
+      .mobile-cards {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .desktop-table {
+          display: none;
+        }
+
+        .mobile-cards {
+          display: block;
+        }
+
+        .mobile-card {
+          background: white;
+          border: 1px solid var(--color-border, #e5e7eb);
+          border-radius: 8px;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 0.75rem;
+          gap: 0.5rem;
+        }
+
+        .mobile-card-title {
+          font-weight: 600;
+          font-size: 1rem;
+          color: var(--color-text, #1f2937);
+          flex: 1;
+          line-height: 1.4;
+        }
+
+        .mobile-card-body {
+          display: grid;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .mobile-card-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid var(--color-border, #f3f4f6);
+        }
+
+        .mobile-card-row:last-child {
+          border-bottom: none;
+        }
+
+        .mobile-card-label {
+          font-size: 0.875rem;
+          color: var(--color-text-secondary, #6b7280);
+          font-weight: 500;
+        }
+
+        .mobile-card-value {
+          font-size: 0.875rem;
+          color: var(--color-text, #1f2937);
+        }
+
+        .mobile-card-actions {
+          margin-top: 0.75rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid var(--color-border, #e5e7eb);
+        }
+
+        .mobile-view-details-btn {
+          display: block;
+          width: 100%;
+          padding: 0.875rem 1rem;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 1rem;
+          font-weight: 600;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-view-details-btn:active {
+          transform: scale(0.98);
+          box-shadow: 0 1px 2px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-view-details-btn:hover {
+          background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+          box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .mobile-card-filename {
+          font-size: 0.75rem;
+          color: var(--color-text-secondary, #9ca3af);
+          margin-top: 0.25rem;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .action-link {
+          display: inline-block;
+          padding: 0.5rem 1rem;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          text-decoration: none;
+          border-radius: 6px;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .action-link:hover {
+          background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+          box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .action-link:active {
+          transform: translateY(0);
+        }
+      }
+    </style>
+
     <script>
       // Configuration - UPDATE THESE URLs
       const CONFIG = {
@@ -160,6 +294,7 @@
 
       // DOM Elements
       const tableBody = document.getElementById("tableBody");
+      const mobileCards = document.getElementById("mobileCards");
       const searchInput = document.getElementById("searchInput");
       const newCallBtn = document.getElementById("newCallBtn");
       const analyzeBtn = document.getElementById("analyzeBtn");
@@ -227,11 +362,17 @@
           console.error("Error fetching data:", error);
           tableBody.innerHTML = `
             <tr>
-              <td colspan="7" class="error-message">
+              <td colspan="6" class="error-message">
                 Error loading data: ${error.message}
                 <br><small>Please check your webhook URL configuration</small>
               </td>
             </tr>
+          `;
+          mobileCards.innerHTML = `
+            <div class="error-message">
+              Error loading data: ${error.message}
+              <br><small>Please check your webhook URL configuration</small>
+            </div>
           `;
         }
       }
@@ -268,20 +409,25 @@
         if (!filteredData || filteredData.length === 0) {
           tableBody.innerHTML = `
             <tr>
-              <td colspan="7" class="empty-state">
+              <td colspan="6" class="empty-state">
                 No calls found. Click "New Transcription" to add one.
               </td>
             </tr>
           `;
+          mobileCards.innerHTML = `
+            <div class="empty-state">
+              No calls found. Click "New Transcription" to add one.
+            </div>
+          `;
           return;
         }
 
+        // Render desktop table
         tableBody.innerHTML = filteredData
           .map((call, index) => {
             console.log(`Rendering row ${index}:`, call);
             return `
           <tr>
-            <td>${call.row_number || index + 1}</td>
             <td>${escapeHtml(call.message_content_call_title || "Untitled Call")}</td>
             <td>${escapeHtml(call.filename || "N/A")}</td>
             <td>${renderSentimentBadge(call.message_content_overall_sentiment)}</td>
@@ -289,10 +435,45 @@
             <td>${renderResultBadge(call.result)}</td>
             <td>
               <a href="#" class="action-link" onclick="showCallDetails(${index}); return false;">
-                View Details →
+                View Details
               </a>
             </td>
           </tr>
+        `;
+          })
+          .join("");
+
+        // Render mobile cards
+        mobileCards.innerHTML = filteredData
+          .map((call, index) => {
+            return `
+          <div class="mobile-card">
+            <div class="mobile-card-header">
+              <div>
+                <div class="mobile-card-title">${escapeHtml(call.message_content_call_title || "Untitled Call")}</div>
+                <div class="mobile-card-filename">${escapeHtml(call.filename || "N/A")}</div>
+              </div>
+            </div>
+            <div class="mobile-card-body">
+              <div class="mobile-card-row">
+                <span class="mobile-card-label">Sentiment</span>
+                <span class="mobile-card-value">${renderSentimentBadge(call.message_content_overall_sentiment)}</span>
+              </div>
+              <div class="mobile-card-row">
+                <span class="mobile-card-label">Quality</span>
+                <span class="mobile-card-value">${renderQualityBadge(call.message_content_questions_quality_score)}</span>
+              </div>
+              <div class="mobile-card-row">
+                <span class="mobile-card-label">Result</span>
+                <span class="mobile-card-value">${renderResultBadge(call.result)}</span>
+              </div>
+            </div>
+            <div class="mobile-card-actions">
+              <button class="mobile-view-details-btn" onclick="showCallDetails(${index})">
+                View Full Details →
+              </button>
+            </div>
+          </div>
         `;
           })
           .join("");
